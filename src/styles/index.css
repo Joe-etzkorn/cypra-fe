@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Figtree', sans-serif !important;
+}
+.ant-typography, .ant-btn, .ant-select-selector, .ant-input {
+  font-family: 'Figtree', sans-serif !important;
+}
+:where(.css-dev-only-do-not-override-apn68).ant-layout {
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+
+
+.common-btn, .common-btn:hover{
+  background: linear-gradient(0deg, #57B2C4, #57B2C4),
+              linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)) !important;
+  border-radius: 8px;
+  width: 100%;
+  height: 48px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.common-font-color, .common-font-color label {
+  color: #667174 !important;
+}
+.common-input {
+  background-color: #F4F6F6 !important;
+  border: 1px solid #66717480 !important;
+}
