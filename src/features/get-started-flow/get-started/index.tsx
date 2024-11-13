@@ -4,10 +4,14 @@ const { TextArea } = Input;
 
 const GetStarted = () => {
   const [status, setStatus] = useState(false);
+  const [usedAspire, setUsedAspire] = useState(true);
   const handleSubmit = () => {
     setStatus(true);
   };
 
+  const handleCheckboxChange = (e: any) => {
+    setUsedAspire(e.target.value != 2);
+  };
   const handleReturnHomePage = () => {
     setStatus(false);
   };
@@ -23,7 +27,8 @@ const GetStarted = () => {
             Thanks for reaching out!
           </h1>
           <p className="common-font-color mt-3 mb-10 text-xl">
-            We'll be in touch soon regarding your interest in Cypra to level-up your business reporting.
+            We'll be in touch soon regarding your interest in Cypra to level-up
+            your business reporting.
           </p>
 
           <Form name="layout-multiple-vertical" layout="vertical">
@@ -58,12 +63,23 @@ const GetStarted = () => {
           administrator to gain access
         </p>
 
-        <Form name="layout-multiple-vertical" layout="vertical">
+        <Form
+          name="layout-multiple-vertical"
+          layout="vertical"
+          onFinish={handleSubmit}
+        >
           <div className="flex space-x-4">
             <Form.Item
               label="Name"
               name="name"
               className="mb-2 common-font-color w-full"
+              rules={[
+                { required: true, message: "Please input your name!" },
+                {
+                  min: 2,
+                  message: "Name must be at least 2 characters",
+                },
+              ]}
             >
               <Input className="h-12 common-input" placeholder="Henry Waill" />
             </Form.Item>
@@ -84,6 +100,16 @@ const GetStarted = () => {
                 label="Company Name"
                 name="companyName"
                 className="mb-2 common-font-color w-full"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your company name!",
+                  },
+                  {
+                    min: 2,
+                    message: "Company name must be at least 2 characters",
+                  },
+                ]}
               >
                 <Input
                   className="h-12 common-input"
@@ -94,6 +120,10 @@ const GetStarted = () => {
                 label="Email"
                 name="email"
                 className="mb-2 common-font-color"
+                rules={[
+                  { required: true, message: "Please input your email!" },
+                  { type: "email", message: "Invalid email!" },
+                ]}
               >
                 <Input
                   className="h-12 common-input"
@@ -113,10 +143,16 @@ const GetStarted = () => {
             </Form.Item>
           </div>
 
-          <Form.Item>
-            <Radio.Group className="float-left">
+          <Form.Item className="!mb-1">
+            <Radio.Group
+              className="float-left"
+              defaultValue={1}
+              onChange={handleCheckboxChange}
+            >
               <Space direction="vertical" className="items-start">
-                <Radio value={1}>Our team currently uses Aspire</Radio>
+                <Radio value={1}>
+                  Our team currently uses Aspire
+                </Radio>
                 <Radio value={2}>
                   Our team uses a different API-enabled software
                 </Radio>
@@ -124,12 +160,20 @@ const GetStarted = () => {
             </Radio.Group>
           </Form.Item>
 
+          {!usedAspire && (
+            <Form.Item className="text-left">
+              <p className="text-red-500 text-xl">
+                We currently only integrate with Aspire. Share your software
+                details above, and we may add it in the future.
+              </p>
+            </Form.Item>
+          )}
+
           <Form.Item>
             <Button
               type="primary"
-              htmlType="button"
+              htmlType="submit"
               className="h-12 font-bold common-btn mt-4 !w-[480px]"
-              onClick={handleSubmit}
             >
               Submit
             </Button>

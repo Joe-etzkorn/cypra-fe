@@ -32,3 +32,29 @@ body {
   background-color: #F4F6F6 !important;
   border: 1px solid #66717480 !important;
 }
+:where(.css-dev-only-do-not-override-apn68).ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+  border-color: #518D9C;
+  background-color: #518D9C;
+}
+:where(.css-dev-only-do-not-override-apn68).ant-radio-wrapper .ant-radio-checked .ant-radio-inner::after {
+  transform: scale(0);
+}
+
+.admin-aside-bg {
+  background: linear-gradient(0deg, rgba(87, 178, 196, 0.1), rgba(87, 178, 196, 0.1)), linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
+}
+.rounded-input-header .ant-input {
+  border-radius: 70px;
+  border-left: none;
+  padding-left: 0;
+}
+.rounded-input-header .ant-input:focus {
+  border: none;
+  box-shadow: none;
+}
+.rounded-input-header .ant-input-group-addon {
+  border-top-left-radius: 70px;
+  border-bottom-left-radius: 70px;
+  border-right: none;
+  background-color: #FFFFFF;
+}

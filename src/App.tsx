@@ -1,12 +1,14 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import SignUp from './features/signup';
+import SignUp from '@features/signup';
+import SignIn from '@features/signin';
+import TroubleSignIn from '@features/trouble-signin';
+import SetPassword from '@features/set-password';
+import UserInvited from '@features/user-invited';
+import GetStarted from '@features/get-started-flow/get-started';
+import AdminSetup from '@features/admin-flow-get-started';
 import MainLayout from './layout';
-import SignIn from './features/signin';
-import TroubleSignIn from './features/trouble-signin';
-import SetPassword from './features/set-password';
-import UserInvited from './features/user-invited';
-import GetStarted from './features/get-started-flow/get-started';
+import AdminSalesDashboard from '@features/admin/sales-dashboard';
 
 const App: React.FC = () => {
   return (
@@ -20,6 +22,11 @@ const App: React.FC = () => {
             <Route path="/set-password" element={<SetPassword />} />
             <Route path="/user-invited" element={<UserInvited />} />
             <Route path="/get-started" element={<GetStarted />} />
+            <Route path="/admin-setup" element={<AdminSetup />} />
+
+            <Route path="admin">
+              <Route path="sales-dashboard" element={<AdminSalesDashboard />} />
+            </Route>
           </Routes>
         </MainLayout>
       </Suspense>

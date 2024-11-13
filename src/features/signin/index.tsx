@@ -12,7 +12,7 @@ const SignIn = () => {
   };
 
   const handleSignup = () => {
-    navigate("/signup");
+    navigate("/get-started");
   };
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -33,6 +33,7 @@ const SignIn = () => {
             label="Email"
             name="email"
             className="mb-2 common-font-color"
+            rules={[{ required: true, message: "Please input your email!" }, { type: "email", message: "Invalid email!" }]}
           >
             <Input className="h-12 w-full common-input" placeholder="henry@henrywaill.com"/>
           </Form.Item>
@@ -40,6 +41,7 @@ const SignIn = () => {
             label="Password"
             name="password"
             className="mb-2 common-font-color"
+            rules={[{ required: true, message: "Please input your password!" }]}
           >
             <Input type="password" className="h-12 w-full common-input" placeholder="*********"/>
           </Form.Item>

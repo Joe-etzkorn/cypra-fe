@@ -23,11 +23,27 @@ const SetPassword = () => {
           Must be at least 8 characters.
         </p>
 
-        <Form name="layout-multiple-vertical" layout="vertical">
+        <Form
+          name="layout-multiple-vertical"
+          layout="vertical"
+          onFinish={handleSubmit}
+        >
           <Form.Item
             label="Password"
             name="password"
             className="mb-2 common-font-color"
+            rules={[
+              { required: true, message: "Please input your password!" },
+              {
+                min: 8,
+                message: "Password must be at least 8 characters",
+              },
+              {
+                pattern: /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/,
+                message:
+                  "Password must include uppercase, lowercase, digit, and special character",
+              },
+            ]}
           >
             <Input
               type="password"
@@ -39,6 +55,17 @@ const SetPassword = () => {
             label="Confirm Password"
             name="confirm_password"
             className="mb-2 common-font-color"
+            rules={[
+              { required: true, message: "Please confirm your password!" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("Passwords do not match!"));
+                },
+              }),
+            ]}
           >
             <Input
               type="password"
@@ -49,9 +76,8 @@ const SetPassword = () => {
           <Form.Item>
             <Button
               type="primary"
-              htmlType="button"
+              htmlType="submit"
               className="w-full h-12 font-bold common-btn mt-10"
-              onClick={handleSubmit}
             >
               Set Password
             </Button>

@@ -25,28 +25,28 @@ const TroubleSignIn = () => {
           Don’t worry! We will send reset instructions to your email.
         </p>
 
-        <Form name="layout-multiple-vertical" layout="vertical">
+        <Form name="layout-multiple-vertical" layout="vertical" onFinish={handleSetPassword}>
           <Form.Item
             label="Email"
             name="email"
             className="mb-2 common-font-color"
+            rules={[{ required: true, message: "Please input your email!" }, { type: "email", message: "Invalid email!" }]}
           >
             <Input className="h-12 w-full common-input" placeholder="henry@henrywaill.com" />
           </Form.Item>
           <Form.Item>
             <Button
               type="primary"
-              htmlType="button"
+              htmlType="submit"
               className="w-full h-12 font-bold common-btn mt-10"
-              onClick={handleSetPassword}
             >
               Reset Password
             </Button>
           </Form.Item>
         </Form>
-        <p className="mt-4 common-font-color">
+        <p className="mt-4 common-font-color cursor-pointer" onClick={handleSignIn}>
           <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
-          <span onClick={handleSignIn} className="common-font-color font-bold cursor-pointer">
+          <span className="common-font-color font-bold">
             Back to sign-in
           </span>
         </p>
