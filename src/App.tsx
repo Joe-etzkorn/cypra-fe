@@ -8,7 +8,7 @@ import UserInvited from '@features/user-invited';
 import GetStarted from '@features/get-started-flow/get-started';
 import AdminSetup from '@features/admin-flow-get-started';
 import MainLayout from './layout';
-import AdminSalesDashboard from '@features/admin/sales-dashboard';
+import AdminSalesDashboard from '@features/admin/sales-dashboard/sales-dashboard';
 
 const App: React.FC = () => {
   return (

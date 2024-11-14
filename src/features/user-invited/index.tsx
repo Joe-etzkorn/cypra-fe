@@ -1,6 +1,11 @@
 import { Button, Form, Input } from "antd";
+import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
+import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
+
 
 const UserInvited = () => {
+  const { formErrors, onFinishFailed, handleFieldsChange } = useFormErrorHandler();
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#F4F6F6">
       <div className="bg-[#F4F6F6] p-12 rounded-3xl shadow-lg text-center w-[556px]">
@@ -15,7 +20,12 @@ const UserInvited = () => {
           <strong>HBW Landscaping</strong>. Create your account below.
         </p>
 
-        <Form name="layout-multiple-vertical" layout="vertical">
+        <Form
+          name="layout-multiple-vertical"
+          layout="vertical"
+          onFinishFailed={onFinishFailed}
+          onFieldsChange={handleFieldsChange}
+        >
           <Form.Item
             label="Email"
             name="email"
@@ -99,6 +109,10 @@ const UserInvited = () => {
               placeholder="*********"
             />
           </Form.Item>
+
+          {formErrors.length > 0 && (
+            <DisplayErrorMessages formErrors={formErrors} />
+          )}
           <Form.Item>
             <Button
               type="primary"

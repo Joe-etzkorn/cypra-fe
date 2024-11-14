@@ -1,8 +1,13 @@
+import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
+import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
 import { Button, Form, Input, Radio, Space } from "antd";
 import { useState } from "react";
 const { TextArea } = Input;
 
 const GetStarted = () => {
+  const { formErrors, onFinishFailed, handleFieldsChange } =
+    useFormErrorHandler();
+
   const [status, setStatus] = useState(false);
   const [usedAspire, setUsedAspire] = useState(true);
   const handleSubmit = () => {
@@ -67,6 +72,8 @@ const GetStarted = () => {
           name="layout-multiple-vertical"
           layout="vertical"
           onFinish={handleSubmit}
+          onFinishFailed={onFinishFailed}
+          onFieldsChange={handleFieldsChange}
         >
           <div className="flex space-x-4">
             <Form.Item
@@ -150,9 +157,7 @@ const GetStarted = () => {
               onChange={handleCheckboxChange}
             >
               <Space direction="vertical" className="items-start">
-                <Radio value={1}>
-                  Our team currently uses Aspire
-                </Radio>
+                <Radio value={1}>Our team currently uses Aspire</Radio>
                 <Radio value={2}>
                   Our team uses a different API-enabled software
                 </Radio>
@@ -169,6 +174,9 @@ const GetStarted = () => {
             </Form.Item>
           )}
 
+          {formErrors.length > 0 && (
+            <DisplayErrorMessages formErrors={formErrors} />
+          )}
           <Form.Item>
             <Button
               type="primary"

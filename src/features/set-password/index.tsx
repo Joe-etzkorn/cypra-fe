@@ -1,7 +1,11 @@
+import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
+import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
 import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const SetPassword = () => {
+  const { formErrors, onFinishFailed, handleFieldsChange } = useFormErrorHandler();
+
   const navigate = useNavigate();
   const handleSubmit = () => {
     navigate("/signin", {
@@ -27,6 +31,8 @@ const SetPassword = () => {
           name="layout-multiple-vertical"
           layout="vertical"
           onFinish={handleSubmit}
+          onFinishFailed={onFinishFailed}
+          onFieldsChange={handleFieldsChange}
         >
           <Form.Item
             label="Password"
@@ -73,6 +79,10 @@ const SetPassword = () => {
               placeholder="*********"
             />
           </Form.Item>
+
+          {formErrors.length > 0 && (
+            <DisplayErrorMessages formErrors={formErrors} />
+          )}
           <Form.Item>
             <Button
               type="primary"

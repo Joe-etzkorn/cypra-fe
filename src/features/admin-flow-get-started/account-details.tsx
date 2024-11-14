@@ -1,3 +1,5 @@
+import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
+import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
 import { Button, Form, Input } from "antd";
 
 interface props {
@@ -5,6 +7,8 @@ interface props {
 }
 
 const AdminAccountDetails: React.FC<props> = ({ setStep }) => {
+  const { formErrors, onFinishFailed, handleFieldsChange } =
+    useFormErrorHandler();
 
   const handleSubmit = () => {
     setStep(3);
@@ -22,7 +26,13 @@ const AdminAccountDetails: React.FC<props> = ({ setStep }) => {
           credentials.
         </p>
 
-        <Form name="layout-multiple-vertical" layout="vertical" onFinish={handleSubmit}>
+        <Form
+          name="layout-multiple-vertical"
+          layout="vertical"
+          onFinish={handleSubmit}
+          onFinishFailed={onFinishFailed}
+          onFieldsChange={handleFieldsChange}
+        >
           <Form.Item
             label="Email"
             name="email"
@@ -125,6 +135,9 @@ const AdminAccountDetails: React.FC<props> = ({ setStep }) => {
             <Input className="h-12 common-input" placeholder="Company XYZ" />
           </Form.Item>
 
+          {formErrors.length > 0 && (
+            <DisplayErrorMessages formErrors={formErrors} />
+          )}
           <Form.Item>
             <Button
               type="primary"

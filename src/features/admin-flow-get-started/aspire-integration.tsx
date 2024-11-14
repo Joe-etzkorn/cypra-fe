@@ -1,15 +1,18 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
+import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
+import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
 
 interface props {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const AdminAspireIntegration: React.FC<props> = ({ setStep }) => {
-
   const handleSubmit = () => {
     setStep(4);
   };
+  const { formErrors, onFinishFailed, handleFieldsChange } =
+    useFormErrorHandler();
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -25,7 +28,13 @@ const AdminAspireIntegration: React.FC<props> = ({ setStep }) => {
           information about your operations.
         </p>
 
-        <Form name="layout-multiple-vertical" layout="vertical" onFinish={handleSubmit}>
+        <Form
+          name="layout-multiple-vertical"
+          layout="vertical"
+          onFinish={handleSubmit}
+          onFinishFailed={onFinishFailed}
+          onFieldsChange={handleFieldsChange}
+        >
           <Form.Item
             label="Client ID"
             name="clientId"
@@ -53,6 +62,10 @@ const AdminAspireIntegration: React.FC<props> = ({ setStep }) => {
               placeholder="*********"
             />
           </Form.Item>
+
+          {formErrors.length > 0 && (
+            <DisplayErrorMessages formErrors={formErrors} />
+          )}
           <Form.Item>
             <Button
               type="primary"

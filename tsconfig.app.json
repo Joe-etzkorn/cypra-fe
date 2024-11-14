@@ -30,6 +30,7 @@
       "@layout/*": ["./layout/*"],
       "@styles/*": ["./styles/*"],
       "@utils/*": ["./utils/*"],
+      "@hooks/*": ["./hooks/*"],
     }
   },
   "include": ["src"]
