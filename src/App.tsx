@@ -9,6 +9,7 @@ import GetStarted from '@features/get-started-flow/get-started';
 import AdminSetup from '@features/admin-flow-get-started';
 import MainLayout from './layout';
 import AdminSalesDashboard from '@features/admin/sales-dashboard/sales-dashboard';
+import AdminReportsSalesPipeline from '@features/admin/reports/sales-pipeline/sales-pipeline';
 
 const App: React.FC = () => {
   return (
@@ -26,6 +27,8 @@ const App: React.FC = () => {
 
             <Route path="admin">
               <Route path="sales-dashboard" element={<AdminSalesDashboard />} />
+              <Route path="reports/sales-pipeline" element={<AdminReportsSalesPipeline />} />
+              <Route path="reports/opportunities-won" element={<AdminSalesDashboard />} />
             </Route>
           </Routes>
         </MainLayout>

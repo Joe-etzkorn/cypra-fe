@@ -79,10 +79,17 @@ body {
   border-radius: 20px !important;
   background-color: #f4f6f6 !important;
 }
+.ant-background {
+  background-color: #f4f6f6 !important;
+}
 
 .sales-won-bg {
-  background: linear-gradient(0deg, #57B2C4, #57B2C4), linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  background: linear-gradient(0deg, #57b2c4, #57b2c4),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
 }
 .ant-form-item-additional {
   display: none !important;
+}
+.ant-menu-item-selected .ant-menu-title-content {
+  color: #007b84;
 }

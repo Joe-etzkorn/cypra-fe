@@ -132,7 +132,7 @@ const pipelineSource: PipelineDataType[] = [
 
 const SalesDashboardContent: React.FC = () => {
   return (
-    <Layout className="rounded-[32px] mr-6 mb-6 bg-[#F4F6F6] overflow-y-auto">
+    <Layout className="rounded-[32px] mx-6 mb-6 bg-[#F4F6F6] overflow-y-auto">
       <Content className="p-8 rounded-[32px]">
         <div className="flex justify-between pb-6 pl-2 flex-wrap">
           <p className="text-[32px] text-[#667174]">Sales Dashboard</p>
@@ -168,7 +168,7 @@ const SalesDashboardContent: React.FC = () => {
           </div>
         </div>
         <Row gutter={[24, 24]} className="flex items-center pb-4">
-          <Col span={8}>
+          <Col xl={8} lg={12} md={24} xs={24}>
             <Card className="bg-[#F4F6F6] border-none ant-card-custom-padding">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col gap-2">
@@ -188,7 +188,7 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={6} lg={16} md={24}>
+          <Col xl={6} lg={12} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Proposals Pending</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -200,7 +200,7 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={4} lg={12} md={24}>
+          <Col xl={4} lg={12} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Close Rate</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -210,7 +210,7 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={6} lg={12} md={24}>
+          <Col xl={6} lg={12} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Estimated Gross Margin</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -219,8 +219,8 @@ const SalesDashboardContent: React.FC = () => {
               <p className="text-sm text-[#667174] pt-1">vs previous period</p>
             </Card>
           </Col>
-          <Col xl={16} lg={16} md={24}>
-            <Card className="bg-white rounded-lg shadow-lg h-full min-h-[344px]">
+          <Col xl={16} lg={16} md={24} xs={24}>
+            <Card className="bg-white rounded-2xl shadow-lg h-full min-h-[344px]">
               <Flex justify="space-between" align="center">
                 <p className="text-xl text-[#667174]">Sales Won</p>
                 <Flex gap={8} className="flex-wrap" justify="flex-end">
@@ -352,8 +352,8 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={8} lg={8} md={24}>
-            <Card className="bg-white rounded-lg shadow-lg h-full 2xl:h-[603px] xl:h-[344px] lg:h-[424px]">
+          <Col xl={8} lg={8} md={24} xs={24}>
+            <Card className="bg-white rounded-2xl shadow-lg h-full 2xl:h-[603px] xl:h-[344px] lg:h-[424px]">
               <Flex justify="space-between" align="center">
                 <p className="text-xl text-[#667174]">Sales Mix</p>
                 <Flex gap={8}>
@@ -378,8 +378,8 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={12} lg={12} md={24}>
-            <Card className="bg-white rounded-lg shadow-lg">
+          <Col xl={12} lg={12} md={24} xs={24}>
+            <Card className="bg-white rounded-2xl shadow-lg">
               <Flex justify="space-between" align="center" className="mb-4">
                 <p className="text-xl text-[#667174]">Leaderboard</p>
                 <div className="rounded-full bg-[#FFFFFF] border border-[#66717480] px-3 py-[11px] cursor-pointer">
@@ -412,8 +412,8 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={12} lg={12} md={24}>
-            <Card className="bg-white rounded-lg shadow-lg">
+          <Col xl={12} lg={12} md={24} xs={24}>
+            <Card className="bg-white rounded-2xl shadow-lg">
               <Flex justify="space-between" align="center" className="mb-4">
                 <p className="text-xl text-[#667174]">Pipeline</p>
                 <div className="rounded-full bg-[#FFFFFF] border border-[#66717480] px-3 py-[11px] cursor-pointer">
