@@ -1,7 +1,7 @@
 import AdminAside from "@layout/admin/aside";
 import AdminHeader from "@layout/admin/header";
-import AdminNavigation from "@layout/admin/nagivation";
-import SalesPipelineContent from "@features/admin/reports/sales-pipeline/sales-pipeline-content";
+import AdminSalesNavigation from "@layout/admin/sales-navigation";
+import SalesPipelineContent from "@features/admin/sales-reports/sales-pipeline/sales-pipeline-content";
 
 const AdminReportsSalesPipeline: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ const AdminReportsSalesPipeline: React.FC = () => {
       <div>
         <AdminHeader />
         <div className="flex h-[90%]">
-          <AdminNavigation />
+          <AdminSalesNavigation />
           <SalesPipelineContent />
         </div>
       </div>

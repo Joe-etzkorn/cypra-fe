@@ -1,11 +1,7 @@
 import React from "react";
 import { Layout, Card, Row, Col, Flex, Table, Select, DatePicker } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faRotateRight,
-  faDownload,
-  faSliders,
-} from "@fortawesome/free-solid-svg-icons";
+import { faRotateRight, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { Space } from "antd";
 import { Doughnut } from "react-chartjs-2";
 import {
@@ -29,7 +25,6 @@ ChartJS.register(
   ArcElement
 );
 const { Content } = Layout;
-const { Column } = Table;
 
 interface BiddingDataType {
   key: React.Key;

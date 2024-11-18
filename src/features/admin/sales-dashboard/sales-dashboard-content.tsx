@@ -140,7 +140,7 @@ const SalesDashboardContent: React.FC = () => {
             <Flex
               justify="space-between"
               align="center"
-              className="rounded-full bg-[#FFFFFF] border border-[#66717480] p-2 cursor-pointer"
+              className="rounded-full bg-[#FFFFFF] border border-[#66717480] px-2 py-1 cursor-pointer"
             >
               <p>Timeframe</p>
               <Space direction="vertical" size={12} className="pl-2">

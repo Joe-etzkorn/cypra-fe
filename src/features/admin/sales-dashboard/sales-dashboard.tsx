@@ -1,6 +1,6 @@
 import AdminAside from "@layout/admin/aside";
 import AdminHeader from "@layout/admin/header";
-import AdminNavigation from "@layout/admin/nagivation";
+import AdminSalesNavigation from "@layout/admin/sales-navigation";
 import SalesDashboardContent from "@features/admin/sales-dashboard/sales-dashboard-content";
 
 const AdminSalesDashboard: React.FC = () => {
@@ -10,7 +10,7 @@ const AdminSalesDashboard: React.FC = () => {
       <div>
         <AdminHeader />
         <div className="flex h-[90%]">
-          <AdminNavigation />
+          <AdminSalesNavigation />
           <SalesDashboardContent />
         </div>
       </div>

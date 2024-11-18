@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-const AdminNavigation: React.FC = () => {
+const AdminSalesNavigation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,7 +19,7 @@ const AdminNavigation: React.FC = () => {
           className="bg-[#E1EBEB] border-r-0 text-base font-semibold"
           mode="inline"
           defaultSelectedKeys={[location.pathname]}
-          defaultOpenKeys={["admin/reports"]}
+          defaultOpenKeys={["admin-sales/reports"]}
           style={{
             backgroundColor: "#E1EBEB",
             borderRight: 0,
@@ -34,29 +34,29 @@ const AdminNavigation: React.FC = () => {
           </Menu.Item>
 
           <Menu.Item
-            key="/admin/sales-dashboard"
+            key="/admin-sales/dashboard"
             style={{ color: "#141922", paddingLeft: "24px" }}
-            onClick={() => handleClick("/admin/sales-dashboard")}
+            onClick={() => handleClick("/admin-sales/dashboard")}
           >
             Dashboard
           </Menu.Item>
 
           <SubMenu
-            key="admin/reports"
+            key="admin-sales/reports"
             title="Reports"
             style={{ color: "#141922"}}
           >
             <Menu.Item
-              key="/admin/reports/sales-pipeline"
+              key="/admin-sales/reports/sales-pipeline"
               style={{ paddingLeft: "36px"}}
-              onClick={() => handleClick("/admin/reports/sales-pipeline")}
+              onClick={() => handleClick("/admin-sales/reports/sales-pipeline")}
             >
               Sales Pipeline
             </Menu.Item>
             <Menu.Item
-              key="/admin/reports/opportunities-won"
+              key="/admin-sales/reports/opportunities-won"
               style={{ paddingLeft: "36px"}}
-              onClick={() => handleClick("/admin/reports/opportunities-won")}
+              onClick={() => handleClick("/admin-sales/reports/opportunities-won")}
             >
               Opportunities Won
             </Menu.Item>
@@ -67,4 +67,4 @@ const AdminNavigation: React.FC = () => {
   );
 };
 
-export default AdminNavigation;
+export default AdminSalesNavigation;
