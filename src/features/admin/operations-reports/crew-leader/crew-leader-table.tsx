@@ -362,46 +362,55 @@ const CrewLeaderColumns: ColumnsType<CrewLeaderDataType> = [
     title: "Crew Leader",
     dataIndex: "crewLeader",
     key: "crewLeader",
+    width: 200,
   },
   {
     title: "Estimated Revenue",
     dataIndex: "estimatedRevenue",
     key: "estimatedRevenue",
+    width: 200,
   },
   {
     title: "Est. Hours",
     dataIndex: "estimatedHours",
     key: "estimatedHours",
+    width: 200,
   },
   {
     title: "Hours",
     dataIndex: "hours",
     key: "hours",
-  },
+    width: 200,
+    },
   {
     title: "Labor Variance",
     dataIndex: "laborVariance",
     key: "laborVariance",
+    width: 200,
   },
   {
     title: "Gross Profit Var.",
     dataIndex: "grossProfit",
     key: "grossProfit",
+    width: 200,
   },
   {
     title: "Est. Gross Margin",
     dataIndex: "estimatedGrossMargin",
     key: "estimatedGrossMargin",
+    width: 200,
   },
   {
     title: "Gross Margin",
     dataIndex: "grossMargin",
     key: "grossMargin",
+    width: 200,
   },
   {
     title: "% Variance",
     dataIndex: "percentVariance",
     key: "percentVariance",
+    width: 200,
   },
 ];
 

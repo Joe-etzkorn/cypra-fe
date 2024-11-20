@@ -1,19 +1,27 @@
-import React from "react";
-import { Layout, Menu } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Layout, Menu } from "antd"
+import React from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useMenuLayout } from "../../stores/menu-layout"
 
-const { Sider } = Layout;
-const { SubMenu } = Menu;
+const { Sider } = Layout
+const { SubMenu } = Menu
 
-const AdminSalesNavigation: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+interface AdminSalesNavigationProps {
+  width?: string | number
+}
 
+const AdminSalesNavigation: React.FC<AdminSalesNavigationProps> = ({
+  width = 250,
+}) => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { toggleOpenMenuLayout } = useMenuLayout()
   const handleClick = (key: string) => {
-    navigate(key);
-  };
+    navigate(key)
+    toggleOpenMenuLayout(false)
+  }
   return (
-    <Sider width={250} className="bg-[#E1EBEB]">
+    <Sider width={width} className="bg-[#E1EBEB]">
       <div className="">
         <Menu
           className="bg-[#E1EBEB] border-r-0 text-base font-semibold"
@@ -44,19 +52,28 @@ const AdminSalesNavigation: React.FC = () => {
           <SubMenu
             key="admin-sales/reports"
             title="Reports"
-            style={{ color: "#141922"}}
+            style={{ color: "#141922" }}
           >
             <Menu.Item
               key="/admin-sales/reports/sales-pipeline"
-              style={{ paddingLeft: "36px"}}
+              style={{ paddingLeft: "36px" }}
               onClick={() => handleClick("/admin-sales/reports/sales-pipeline")}
             >
               Sales Pipeline
             </Menu.Item>
             <Menu.Item
+              key="/admin-sales/reports/customer-detail"
+              style={{ paddingLeft: "36px" }}
+              onClick={() => handleClick("/admin-sales/reports/customer-detail")}
+            >
+              Customer Detail
+            </Menu.Item>
+            <Menu.Item
               key="/admin-sales/reports/opportunities-won"
-              style={{ paddingLeft: "36px"}}
-              onClick={() => handleClick("/admin-sales/reports/opportunities-won")}
+              style={{ paddingLeft: "36px" }}
+              onClick={() =>
+                handleClick("/admin-sales/reports/opportunities-won")
+              }
             >
               Opportunities Won
             </Menu.Item>
@@ -64,7 +81,7 @@ const AdminSalesNavigation: React.FC = () => {
         </Menu>
       </div>
     </Sider>
-  );
-};
+  )
+}
 
-export default AdminSalesNavigation;
+export default AdminSalesNavigation

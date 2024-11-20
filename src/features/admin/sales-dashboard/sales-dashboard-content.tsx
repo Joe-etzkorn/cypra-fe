@@ -1,14 +1,14 @@
-import React from "react";
-import { Layout, Card, Row, Col, Flex, Table, Select } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react"
+import { Layout, Card, Row, Col, Flex, Table, Select } from "antd"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faArrowTrendUp,
   faRotateRight,
   faDownload,
   faSliders,
-} from "@fortawesome/free-solid-svg-icons";
-import { DatePicker, Space } from "antd";
-import { Bar, Doughnut } from "react-chartjs-2";
+} from "@fortawesome/free-solid-svg-icons"
+import { DatePicker, Space } from "antd"
+import { Bar, Doughnut } from "react-chartjs-2"
 import {
   Chart as ChartJS,
   BarElement,
@@ -17,9 +17,9 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-} from "chart.js";
-import { doughnutData, doughnutOptions } from "./doughnut-chart-data";
-import { SalesWonData, SalesWonOptions } from "./bar-chart-data";
+} from "chart.js"
+import { doughnutData, doughnutOptions } from "./doughnut-chart-data"
+import { SalesWonData, SalesWonOptions } from "./bar-chart-data"
 
 ChartJS.register(
   BarElement,
@@ -27,19 +27,19 @@ ChartJS.register(
   LinearScale,
   Tooltip,
   Legend,
-  ArcElement
-);
-const { Content } = Layout;
-const { RangePicker } = DatePicker;
-const { Column } = Table;
+  ArcElement,
+)
+const { Content } = Layout
+const { RangePicker } = DatePicker
+const { Column } = Table
 
 interface LeaderBoardDataType {
-  key: React.Key;
-  name: string;
-  branch: string;
-  opportunities: number;
-  salesWon: string;
-  closeRate: string;
+  key: React.Key
+  name: string
+  branch: string
+  opportunities: number
+  salesWon: string
+  closeRate: string
 }
 
 const leaderBoardSource: LeaderBoardDataType[] = [
@@ -83,13 +83,13 @@ const leaderBoardSource: LeaderBoardDataType[] = [
     salesWon: "$522,000",
     closeRate: "49%",
   },
-];
+]
 interface PipelineDataType {
-  key: React.Key;
-  stage: string;
-  estimateCost: string;
-  estimatedHours: number;
-  opportunities: number;
+  key: React.Key
+  stage: string
+  estimateCost: string
+  estimatedHours: number
+  opportunities: number
 }
 
 const pipelineSource: PipelineDataType[] = [
@@ -128,15 +128,17 @@ const pipelineSource: PipelineDataType[] = [
     estimatedHours: 25,
     opportunities: 25,
   },
-];
+]
 
 const SalesDashboardContent: React.FC = () => {
   return (
-    <Layout className="rounded-[32px] mx-6 mb-6 bg-[#F4F6F6] overflow-y-auto">
+    <Layout className="rounded-[32px] mx-6 mb-6 bg-[#F4F6F6] overflow-y-auto w-2/3 lg:w-full">
       <Content className="p-8 rounded-[32px]">
-        <div className="flex justify-between pb-6 pl-2 flex-wrap">
-          <p className="text-[32px] text-[#667174]">Sales Dashboard</p>
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col md:flex-row justify-between pb-6 pl-2 flex-wrap">
+          <p className="text-[24px] md:text-[32px] text-[#667174]">
+            Sales Dashboard
+          </p>
+          <div className="flex items-center gap-2 mt-4 md:mt-0">
             <Flex
               justify="space-between"
               align="center"
@@ -167,13 +169,13 @@ const SalesDashboardContent: React.FC = () => {
             />
           </div>
         </div>
-        <Row gutter={[24, 24]} className="flex items-center pb-4">
-          <Col xl={8} lg={12} md={24} xs={24}>
+        <Row gutter={[24, 24]} className="flex flex-col md:flex-row pb-4">
+          <Col xxl={8} xl={12} lg={12} md={24} xs={24}>
             <Card className="bg-[#F4F6F6] border-none ant-card-custom-padding">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col gap-2">
-                  <p className="text-2xl text-[#141922]">Revenue</p>
-                  <p className="text-4xl font-semibold text-[#141922]">
+                  <p className="text-xl md:text-2xl text-[#141922]">Revenue</p>
+                  <p className="text-3xl md:text-4xl font-semibold text-[#141922]">
                     <span className="text-[#667174]">$</span>10,750,322
                   </p>
                   <p className="text-sm text-[#667174]">
@@ -188,7 +190,7 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={6} lg={12} md={24} xs={24}>
+          <Col xxl={6} xl={12} lg={12} md={12} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Proposals Pending</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -200,7 +202,7 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={4} lg={12} md={24} xs={24}>
+          <Col xxl={4} xl={12} lg={12} md={12} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Close Rate</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -210,7 +212,7 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={6} lg={12} md={24} xs={24}>
+          <Col xxl={6} xl={12} lg={12} md={12} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Estimated Gross Margin</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -219,11 +221,13 @@ const SalesDashboardContent: React.FC = () => {
               <p className="text-sm text-[#667174] pt-1">vs previous period</p>
             </Card>
           </Col>
-          <Col xl={16} lg={16} md={24} xs={24}>
-            <Card className="bg-white rounded-2xl shadow-lg h-full min-h-[344px]">
-              <Flex justify="space-between" align="center">
-                <p className="text-xl text-[#667174]">Sales Won</p>
-                <Flex gap={8} className="flex-wrap" justify="flex-end">
+          <Col xxl={16} xl={16} lg={24} md={24} xs={24} className="flex flex-col">
+            <Card className="bg-white rounded-2xl shadow-lg h-full min-h-[344px] flex-1">
+              <Flex justify="space-between" align="center" wrap>
+                <p className="text-lg md:text-xl text-[#667174] whitespace-nowrap">
+                  Sales Won
+                </p>
+                <Flex gap={8} wrap justify="flex-end">
                   <Flex
                     justify="space-between"
                     align="center"
@@ -352,11 +356,13 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={8} lg={8} md={24} xs={24}>
-            <Card className="bg-white rounded-2xl shadow-lg h-full 2xl:h-[603px] xl:h-[344px] lg:h-[424px]">
-              <Flex justify="space-between" align="center">
-                <p className="text-xl text-[#667174]">Sales Mix</p>
-                <Flex gap={8}>
+          <Col xxl={8} xl={8} lg={24} md={24} xs={24} className="flex flex-col">
+            <Card className="bg-white rounded-2xl shadow-lg h-full 2xl:h-[603px] xl:h-[344px] lg:h-[424px] flex-1">
+              <Flex justify="space-between" align="center" wrap>
+                <p className="text-lg md:text-xl text-[#667174] whitespace-nowrap">
+                  Sales Mix
+                </p>
+                <Flex gap={8} wrap justify="flex-end">
                   <div className="rounded-full bg-[#FFFFFF] border border-[#66717480] px-3 py-[11px] cursor-pointer h-[40px] w-[40px]">
                     <img
                       src="/assets/admin/images/filter.svg"
@@ -372,16 +378,16 @@ const SalesDashboardContent: React.FC = () => {
                   />
                 </Flex>
               </Flex>
-              <div className="rounded-lg flex items-center justify-center 2xl:h-[450px] xl:h-[250px] lg:h-[424px]">
+              <div className="rounded-lg flex items-center justify-center">
                 <Doughnut data={doughnutData} options={doughnutOptions} />
               </div>
             </Card>
           </Col>
 
-          <Col xl={12} lg={12} md={24} xs={24}>
+          <Col xl={12} lg={12} md={24} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <Flex justify="space-between" align="center" className="mb-4">
-                <p className="text-xl text-[#667174]">Leaderboard</p>
+                <p className="text-lg md:text-xl text-[#667174]">Leaderboard</p>
                 <div className="rounded-full bg-[#FFFFFF] border border-[#66717480] px-3 py-[11px] cursor-pointer">
                   <img
                     src="/assets/admin/images/filter.svg"
@@ -412,10 +418,10 @@ const SalesDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={12} lg={12} md={24} xs={24}>
+          <Col xl={12} lg={12} md={24} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <Flex justify="space-between" align="center" className="mb-4">
-                <p className="text-xl text-[#667174]">Pipeline</p>
+                <p className="text-lg md:text-xl text-[#667174]">Pipeline</p>
                 <div className="rounded-full bg-[#FFFFFF] border border-[#66717480] px-3 py-[11px] cursor-pointer">
                   <img
                     src="/assets/admin/images/filter.svg"
@@ -451,7 +457,7 @@ const SalesDashboardContent: React.FC = () => {
         </Row>
       </Content>
     </Layout>
-  );
-};
+  )
+}
 
-export default SalesDashboardContent;
+export default SalesDashboardContent

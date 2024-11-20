@@ -116,3 +116,7 @@ body {
 .ant-menu-item-selected .ant-menu-title-content {
   color: #007b84;
 }
+
+.ant-form-item-explain-error {
+  display: none !important;
+}

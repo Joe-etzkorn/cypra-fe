@@ -24,6 +24,7 @@ import {
   CrewLeaderSources,
 } from "./crew-leader-table";
 import CrewLeaderEfficiencyAndRevenueChart from "./crew-leader-eff-and-revenue-chart";
+import CrewLeaderEffAndWarrantyHoursChart from "./crew-leader-eff-and-warranty-hours-chart";
 
 ChartJS.register(
   BarElement,
@@ -38,12 +39,12 @@ const { RangePicker } = DatePicker;
 
 const CrewLeaderContent: React.FC = () => {
   return (
-    <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto">
+    <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto max-w-[calc(100vw-8rem)] lg:max-w-[calc(100vw-24rem)]">
       <Content className="p-8 rounded-[32px]">
         <div className="flex justify-between pb-6 pl-2 flex-wrap">
           <p className="text-[32px] text-[#667174]">Opportunities Won Report</p>
           <div className="flex items-center gap-2 flex-wrap">
-            <Flex gap={8} className="flex-wrap" justify="flex-end">
+            <Flex gap={8} className="flex-wrap" justify="flex-start">
               <Flex
                 justify="space-between"
                 align="center"
@@ -156,7 +157,7 @@ const CrewLeaderContent: React.FC = () => {
           </div>
         </div>
         <Row gutter={[24, 24]} className="flex items-center pb-4">
-          <Col xl={9} lg={12} md={24} xs={24}>
+          <Col xxl={9} xl={12} lg={12} md={24} xs={24}>
             <Card className="bg-[#F4F6F6] border-none ant-card-custom-padding">
               <Flex className="flex flex-col gap-2">
                 <Flex justify="flex-start" align="center" gap={10}>
@@ -173,7 +174,7 @@ const CrewLeaderContent: React.FC = () => {
               </Flex>
             </Card>
           </Col>
-          <Col xl={5} lg={12} md={24} xs={24}>
+          <Col xxl={5} xl={12} lg={12} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Earned Revenue / Crew</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -184,7 +185,7 @@ const CrewLeaderContent: React.FC = () => {
               </p>
             </Card>
           </Col>
-          <Col xl={6} lg={12} md={24} xs={24}>
+          <Col xxl={6} xl={12} lg={12} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Gross Margin</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -195,7 +196,7 @@ const CrewLeaderContent: React.FC = () => {
               </p>
             </Card>
           </Col>
-          <Col xl={4} lg={12} md={24} xs={24}>
+          <Col xxl={4} xl={12} lg={12} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Hours Variance</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -306,7 +307,7 @@ const CrewLeaderContent: React.FC = () => {
                 dataSource={CrewLeaderSources}
                 columns={CrewLeaderColumns}
                 pagination={false}
-                scroll={{ y: 65 * 5 }}
+                scroll={{ x: "max-content", y: 65 * 5 }}
                 expandable={{
                   expandIcon: ({ expanded, onExpand, record }) =>
                     expanded ? (
@@ -328,7 +329,7 @@ const CrewLeaderContent: React.FC = () => {
               />
             </Card>
           </Col>
-          <Col xl={12} lg={12} md={24} xs={24}>
+          <Col xl={12} lg={24} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <Flex justify="space-between" align="center" className="mb-4">
                 <p className="text-xl text-[#667174]">
@@ -343,9 +344,13 @@ const CrewLeaderContent: React.FC = () => {
                   />
                 </div>
               </Flex>
+
+              <div className="min-h-[400px]">
+                <CrewLeaderEffAndWarrantyHoursChart />
+              </div>
             </Card>
           </Col>
-          <Col xl={12} lg={12} md={24} xs={24}>
+          <Col xl={12} lg={24} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <Flex justify="space-between" align="center" className="mb-4">
                 <p className="text-xl text-[#667174]">
@@ -360,6 +365,9 @@ const CrewLeaderContent: React.FC = () => {
                   />
                 </div>
               </Flex>
+              <div className="min-h-[400px]">
+                <CrewLeaderEfficiencyAndRevenueChart />
+              </div>
             </Card>
           </Col>
         </Row>

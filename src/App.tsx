@@ -13,6 +13,8 @@ import AdminReportsSalesPipeline from "@features/admin/sales-reports/sales-pipel
 import AdminOpportunitiesWon from "@features/admin/sales-reports/opportunities-won/opportunities-won";
 import AdminOperationsDashboard from "@features/admin/operations-dashboard/operations-dashboard";
 import AdminReportCrewLeader from "@features/admin/operations-reports/crew-leader/crew-leader";
+import AdminServicesReport from "@features/admin/operations-reports/services-report/services-report";
+import AdminOpportunitiesReport from "@features/admin/operations-reports/opportunities-report/opportunities-report";
 
 const App: React.FC = () => {
   return (
@@ -43,9 +45,11 @@ const App: React.FC = () => {
             <Route path="admin-operations">
               <Route path="dashboard" element={<AdminOperationsDashboard />} />
               <Route path="reports">
+                <Route path="crew-leader" element={<AdminReportCrewLeader />} />
+                <Route path="services" element={<AdminServicesReport />} />
                 <Route
-                  path="crew-leader"
-                  element={<AdminReportCrewLeader />}
+                  path="opportunities"
+                  element={<AdminOpportunitiesReport />}
                 />
               </Route>
             </Route>

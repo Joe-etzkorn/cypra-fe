@@ -207,12 +207,12 @@ const OpportunitiesSources: OpportunitiesDataType[] = [
 ];
 
 const OpportunitiesColumns: ColumnsType<OpportunitiesDataType> = [
-  { title: "Sales Representative", dataIndex: "salesRepresentative", key: "salesRepresentative" },
-  { title: "Estimated Revenue", dataIndex: "estimatedRevenue", key: "estimatedRevenue" },
-  { title: "Estimated Hours", dataIndex: "estimatedHours", key: "estimatedHours" },
-  { title: "Estimated Costs", dataIndex: "estimatedCosts", key: "estimatedCosts" },
-  { title: "Estimated Gross Profit", dataIndex: "estimatedGrossProfit", key: "estimatedGrossProfit" },
-  { title: "Estimated Gross Margin", dataIndex: "estimatedGrossMargin", key: "estimatedGrossMargin" },
+  { title: "Sales Representative", dataIndex: "salesRepresentative", key: "salesRepresentative", width: 200 },
+  { title: "Estimated Revenue", dataIndex: "estimatedRevenue", key: "estimatedRevenue", width: 200 },
+  { title: "Estimated Hours", dataIndex: "estimatedHours", key: "estimatedHours", width: 200 },
+  { title: "Estimated Costs", dataIndex: "estimatedCosts", key: "estimatedCosts", width: 200 },
+  { title: "Estimated Gross Profit", dataIndex: "estimatedGrossProfit", key: "estimatedGrossProfit", width: 200 },
+  { title: "Estimated Gross Margin", dataIndex: "estimatedGrossMargin", key: "estimatedGrossMargin", width: 200 },
 ];
 
 export { OpportunitiesSources, OpportunitiesColumns };

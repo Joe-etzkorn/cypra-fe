@@ -1,19 +1,27 @@
-import React from "react";
-import { Layout, Menu } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
+import React from "react"
+import { Layout, Menu } from "antd"
+import { useNavigate, useLocation } from "react-router-dom"
+import { useMenuLayout } from "../../stores/menu-layout"
 
-const { Sider } = Layout;
-const { SubMenu } = Menu;
+const { Sider } = Layout
+const { SubMenu } = Menu
 
-const AdminOperationsNavigation: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+interface AdminOperationsNavigationProps {
+  width?: string | number
+}
 
+const AdminOperationsNavigation: React.FC<AdminOperationsNavigationProps> = ({
+  width = 250,
+}) => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { toggleOpenMenuLayout } = useMenuLayout()
   const handleClick = (key: string) => {
-    navigate(key);
-  };
+    navigate(key)
+    toggleOpenMenuLayout(false)
+  }
   return (
-    <Sider width={250} className="bg-[#E1EBEB]">
+    <Sider width={width} className="bg-[#E1EBEB]">
       <div className="">
         <Menu
           className="bg-[#E1EBEB] border-r-0 text-base font-semibold"
@@ -58,7 +66,7 @@ const AdminOperationsNavigation: React.FC = () => {
             <Menu.Item
               key="/admin-operations/reports/services"
               style={{ paddingLeft: "36px" }}
-              // onClick={() => handleClick("/admin-operations/reports/services")}
+              onClick={() => handleClick("/admin-operations/reports/services")}
             >
               Services
             </Menu.Item>
@@ -72,7 +80,7 @@ const AdminOperationsNavigation: React.FC = () => {
             <Menu.Item
               key="/admin-operations/reports/opportunities"
               style={{ paddingLeft: "36px" }}
-              // onClick={() => handleClick("/admin-operations/reports/opportunities")}
+              onClick={() => handleClick("/admin-operations/reports/opportunities")}
             >
               Opportunities
             </Menu.Item>
@@ -80,7 +88,7 @@ const AdminOperationsNavigation: React.FC = () => {
         </Menu>
       </div>
     </Sider>
-  );
-};
+  )
+}
 
-export default AdminOperationsNavigation;
+export default AdminOperationsNavigation

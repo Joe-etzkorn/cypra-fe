@@ -306,7 +306,7 @@ const SalesPipelineContent: React.FC = () => {
         <div className="flex justify-between pb-6 pl-2 flex-wrap">
           <p className="text-[32px] text-[#667174]">Sales Pipeline Report</p>
           <div className="flex items-center gap-2">
-            <Flex gap={8} className="flex-wrap" justify="flex-end">
+            <Flex gap={8} wrap justify="flex-end">
               <Flex
                 justify="space-between"
                 align="center"
@@ -414,7 +414,7 @@ const SalesPipelineContent: React.FC = () => {
           </div>
         </div>
         <Row gutter={[24, 24]} className="flex items-center pb-4">
-          <Col xl={6} lg={12} md={12} xs={24}>
+          <Col xxl={6} xl={12} lg={12} md={12} sm={24} xs={24}>
             <Card className="bg-[#F4F6F6] border-none ant-card-custom-padding">
               <div className="flex flex-col gap-1">
                 <p className="text-[40px] leading-[48px] font-semibold text-[#141922]">
@@ -429,19 +429,19 @@ const SalesPipelineContent: React.FC = () => {
               </div>
             </Card>
           </Col>
-          <Col xl={4} lg={6} md={6} xs={24}>
+          <Col xxl={4} xl={6} lg={6} md={6} sm={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center border-[#57B2C4]">
               <p className="text-sm text-[#141922]">Opportunities Bidding</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">6</p>
             </Card>
           </Col>
-          <Col xl={4} lg={6} md={6} xs={24}>
+          <Col xxl={4} xl={6} lg={6} md={6} sm={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center border-[#57B2C4]">
               <p className="text-sm text-[#141922]">Opportunities Delivered</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">8</p>
             </Card>
           </Col>
-          <Col xl={5} lg={12} md={12} xs={24}>
+          <Col xxl={5} xl={12} lg={12} md={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Most Active Division</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -452,7 +452,7 @@ const SalesPipelineContent: React.FC = () => {
               </p>
             </Card>
           </Col>
-          <Col xl={5} lg={12} md={12} xs={24}>
+          <Col xxl={5} xl={12} lg={12} md={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Average Sales Cycle</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -589,10 +589,10 @@ const SalesPipelineContent: React.FC = () => {
                   </div>
                 </Flex>
               </Flex>
-              <Row gutter={[24, 24]} className="mt-6">
-                <Col span={8}>
-                  <Flex justify="flex-end" align="center" className="flex-col">
-                    <div className="rounded-lg flex items-center justify-center 2xl:h-[450px] xl:h-[250px] lg:h-[424px] relative">
+              <Row gutter={[24, 24]} className="mt-6 justify-center">
+                <Col span={10}>
+                  <Flex justify="center" align="center" className="flex-col">
+                    <div className="rounded-lg flex items-center justify-center relative">
                       <Doughnut data={doughnutData} options={doughnutOptions} />
                       <p className="text-[#141922] text-[40px] font-semibold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         55%
@@ -609,7 +609,7 @@ const SalesPipelineContent: React.FC = () => {
                     </p>
                   </Flex>
                 </Col>
-                <Col xl={16} lg={16} md={24} xs={24}>
+                <Col xl={14} lg={24} md={24} xs={24}>
                   <Table<OpportunityDataType>
                     dataSource={opportunitiesSource}
                     columns={opportunitiesColumns}

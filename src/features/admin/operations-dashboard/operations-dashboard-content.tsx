@@ -47,9 +47,9 @@ const OperationsDashboardContent: React.FC = () => {
   return (
     <Layout className="rounded-[32px] mx-6 mb-6 bg-[#F4F6F6] overflow-y-auto">
       <Content className="p-8 rounded-[32px]">
-        <div className="flex justify-between pb-6 pl-2 flex-wrap">
+        <div className="flex flex-col md:flex-row justify-between pb-6 pl-2 flex-wrap">
           <p className="text-[32px] text-[#667174]">Operations Dashboard</p>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-row flex-wrap gap-2">
             <Flex
               justify="space-between"
               align="center"
@@ -85,7 +85,7 @@ const OperationsDashboardContent: React.FC = () => {
                 <RangePicker className="rounded-xl" />
               </Space>
             </Flex>
-            <div className="rounded-full bg-[#FFFFFF] border border-[#66717480] px-3 py-[11px] cursor-pointer">
+            <div className="rounded-full bg-[#FFFFFF] border border-[#66717480] px-3 py-[11px] cursor-pointer h-10 w-10">
               <img
                 src="/assets/admin/images/filter.svg"
                 alt=""
@@ -105,12 +105,14 @@ const OperationsDashboardContent: React.FC = () => {
             />
           </div>
         </div>
-        <Row gutter={[24, 24]} className="flex items-center pb-4">
-          <Col xl={8} lg={12} md={24} xs={24}>
+        <Row gutter={[24, 24]} className="flex flex-col md:flex-row pb-4">
+          <Col xxl={8} xl={12} lg={12} md={24} xs={24}>
             <Card className="bg-[#F4F6F6] border-none ant-card-custom-padding">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col gap-2">
-                  <p className="text-2xl text-[#141922]">Earned Revenue</p>
+                  <p className="text-2xl text-[#141922] whitespace-nowrap">
+                    Earned Revenue
+                  </p>
                   <p className="text-4xl font-semibold text-[#141922]">
                     <span className="text-[#667174]">$</span>10,750,322
                   </p>
@@ -125,7 +127,7 @@ const OperationsDashboardContent: React.FC = () => {
               </div>
             </Card>
           </Col>
-          <Col xl={6} lg={12} md={24} xs={24}>
+          <Col xxl={6} xl={12} lg={12} md={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg ant-card-report-padding">
               <p className="text-sm text-[#141922]">vs previous $8,202,093</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -136,7 +138,7 @@ const OperationsDashboardContent: React.FC = () => {
               </p>
             </Card>
           </Col>
-          <Col xl={4} lg={9} md={24} xs={24}>
+          <Col xxl={4} xl={8} lg={9} md={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg ant-card-report-padding">
               <p className="text-sm text-[#141922]">Gross Margin</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -145,7 +147,7 @@ const OperationsDashboardContent: React.FC = () => {
               <p className="text-sm text-[#667174] pt-1">vs previous period</p>
             </Card>
           </Col>
-          <Col xl={3} lg={7} md={24} xs={24}>
+          <Col xxl={3} xl={8} lg={7} md={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center ant-card-report-padding border-[#57B2C4]">
               <p className="text-sm text-[#141922]">Hours Variance</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -165,7 +167,7 @@ const OperationsDashboardContent: React.FC = () => {
               </Flex>
             </Card>
           </Col>
-          <Col xl={3} lg={8} md={24} xs={24}>
+          <Col xxl={3} xl={8} lg={8} md={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center ant-card-report-padding border-[#57B2C4]">
               <p className="text-sm text-[#141922]">Labor Rate Variance</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -186,10 +188,16 @@ const OperationsDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={16} lg={16} md={24} xs={24}>
+          <Col xxl={16} xl={16} lg={24} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg h-full min-h-[344px]">
-              <Flex justify="space-between" align="center">
-                <p className="text-xl text-[#667174]">Earned Revenue</p>
+              <Flex
+                justify="space-between"
+                align="center"
+                className="flex-col md:flex-row"
+              >
+                <p className="text-xl text-[#667174] whitespace-nowrap">
+                  Earned Revenue
+                </p>
                 <Flex gap={8} className="flex-wrap" justify="flex-end">
                   <Flex
                     justify="space-between"
@@ -278,8 +286,8 @@ const OperationsDashboardContent: React.FC = () => {
                   </Flex>
                 </Flex>
               </Flex>
-              <Row className="flex items-end">
-                <Col xl={6} lg={9} md={24}>
+              <Row className="flex flex-col items-end md:flex-row">
+                <Col xl={6} lg={9} md={24} className="flex-end">
                   <Card className="sales-won-bg rounded-2xl shadow-lg relative min-w-[120px]">
                     <h3
                       className="text-white text-sm font-semibold"
@@ -311,7 +319,7 @@ const OperationsDashboardContent: React.FC = () => {
                   </Card>
                 </Col>
                 <Col xl={18} lg={15} md={24}>
-                  <div className="h-full rounded-lg flex items-center justify-center">
+                  <div className="h-full rounded-lg flex items-center">
                     <Bar data={SalesWonData} options={SalesWonOptions} />
                   </div>
                 </Col>
@@ -319,29 +327,23 @@ const OperationsDashboardContent: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xl={8} lg={8} md={24} xs={24}>
-            <Card className="bg-white rounded-2xl shadow-lg h-full 2xl:h-[603px] xl:h-[344px] lg:h-[424px]">
-              <Flex justify="space-between" align="center">
-                <p className="text-xl text-[#667174]">Revenue Mix</p>
-                <Flex gap={8}>
-                  <div className="rounded-full bg-[#FFFFFF] border border-[#66717480] px-3 py-[11px] cursor-pointer h-[40px] w-[40px]">
-                    <img
-                      src="/assets/admin/images/filter.svg"
-                      alt=""
-                      width={14}
-                      height={14}
-                    />
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faSliders}
-                    fill="#66717480"
-                    className="rounded-full bg-[#FFFFFF] border border-[#66717480] p-3 cursor-pointer"
-                  />
-                </Flex>
+          <Col xxl={8} xl={8} lg={24} md={24} xs={24} className="flex flex-col">
+            <Card className="sales-won-bg rounded-2xl shadow-lg relative min-w-[120px] h-full 2xl:h-[603px] xl:h-[344px] lg:h-[424px] flex-1">
+              <Flex className="flex-col text-white gap-4 pl-5 text-sm">
+                <h3 className="text-xl">Operations Backlog</h3>
+                <div>
+                  <h4>Revenue Backlog</h4>
+                  <p className="font-bold text-xl">$800,000</p>
+                </div>
+                <div>
+                  <h4>Hours Backlog</h4>
+                  <p className="font-bold text-xl">4,432 Hours</p>
+                </div>
+                <div>
+                  <h4>Runway</h4>
+                  <p className="font-bold text-xl">48 Days</p>
+                </div>
               </Flex>
-              <div className="rounded-lg flex items-center justify-center 2xl:h-[450px] xl:h-[250px] lg:h-[424px]">
-                <Doughnut data={doughnutData} options={doughnutOptions} />
-              </div>
             </Card>
           </Col>
 

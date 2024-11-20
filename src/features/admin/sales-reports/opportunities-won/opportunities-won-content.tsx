@@ -36,12 +36,12 @@ ChartJS.register(
 const { Content } = Layout;
 const { RangePicker } = DatePicker;
 
-const OpportunitiesWonContent: React.FC = () => {
+const OpportunitiesWonContent: React.FC = () => {  
   return (
-    <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto">
+    <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto max-w-[calc(100vw-8rem)] lg:max-w-[calc(100vw-24rem)]">
       <Content className="p-8 rounded-[32px]">
-        <div className="flex justify-between pb-6 pl-2 flex-wrap">
-          <p className="text-[32px] text-[#667174]">Opportunities Won Report</p>
+        <div className="flex flex-col md:flex-row justify-between pb-6 pl-2 flex-wrap">
+          <p className="text-[24px] md:text-[32px] text-[#667174]">Opportunities Won Report</p>
           <div className="flex items-center gap-2 flex-wrap">
             <Flex
               justify="space-between"
@@ -68,8 +68,8 @@ const OpportunitiesWonContent: React.FC = () => {
             />
           </div>
         </div>
-        <Row gutter={[24, 24]} className="flex items-center pb-4">
-          <Col xl={7} lg={24} md={24} xs={24}>
+        <Row gutter={[16, 16]} className="flex items-center pb-4">
+          <Col xxl={7} xl={12} lg={24} md={24} sm={24} xs={24}>
             <Card className="bg-[#F4F6F6] border-none ant-card-custom-padding">
               <Flex className="flex flex-col gap-2">
                 <Flex justify="flex-start" align="center" gap={10}>
@@ -86,7 +86,7 @@ const OpportunitiesWonContent: React.FC = () => {
               </Flex>
             </Card>
           </Col>
-          <Col xl={5} lg={12} md={24} xs={24}>
+          <Col xxl={5} xl={12} lg={12} md={12} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Estimated Revenue</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -107,7 +107,7 @@ const OpportunitiesWonContent: React.FC = () => {
               </Flex>
             </Card>
           </Col>
-          <Col xl={5} lg={12} md={24} xs={24}>
+          <Col xxl={5} xl={8} lg={12} md={12} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Estimated Gross Profit</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -128,7 +128,7 @@ const OpportunitiesWonContent: React.FC = () => {
               </Flex>
             </Card>
           </Col>
-          <Col xl={3} lg={12} md={12} xs={24}>
+          <Col xxl={3} xl={8} lg={12} md={12} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center border-[#57B2C4] ant-card-report-padding">
               <p className="text-sm text-[#141922]">Estimated Gross Margin</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
@@ -148,7 +148,7 @@ const OpportunitiesWonContent: React.FC = () => {
               </Flex>
             </Card>
           </Col>
-          <Col xl={4} lg={12} md={12} xs={24}>
+          <Col xxl={4} xl={8} lg={12} md={12} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center border-[#57B2C4] ant-card-report-padding">
               <p className="text-sm text-[#141922]">Estimated Hours</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
