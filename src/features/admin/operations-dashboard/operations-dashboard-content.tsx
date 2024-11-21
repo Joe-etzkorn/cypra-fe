@@ -5,11 +5,10 @@ import {
   faArrowTrendUp,
   faRotateRight,
   faDownload,
-  faSliders,
   faArrowTrendDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { DatePicker, Space } from "antd";
-import { Bar, Doughnut } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   BarElement,
@@ -19,7 +18,6 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
-import { doughnutData, doughnutOptions } from "./doughnut-chart-data";
 import { SalesWonData, SalesWonOptions } from "./bar-chart-data";
 import {
   CrewReportDataType,

@@ -70,13 +70,13 @@ const AdminOperationsNavigation: React.FC<AdminOperationsNavigationProps> = ({
             >
               Services
             </Menu.Item>
-            <Menu.Item
+            {/* <Menu.Item
               key="/admin-operations/reports/properties"
               style={{ paddingLeft: "36px" }}
               // onClick={() => handleClick("/admin-operations/reports/properties")}
             >
               Properties
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item
               key="/admin-operations/reports/opportunities"
               style={{ paddingLeft: "36px" }}

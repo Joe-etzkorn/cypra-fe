@@ -15,6 +15,7 @@ import AdminOperationsDashboard from "@features/admin/operations-dashboard/opera
 import AdminReportCrewLeader from "@features/admin/operations-reports/crew-leader/crew-leader";
 import AdminServicesReport from "@features/admin/operations-reports/services-report/services-report";
 import AdminOpportunitiesReport from "@features/admin/operations-reports/opportunities-report/opportunities-report";
+import AdminReportCustomerDetail from "@features/admin/sales-reports/customer-detail/customer-detail";
 
 const App: React.FC = () => {
   return (
@@ -35,6 +36,10 @@ const App: React.FC = () => {
               <Route
                 path="reports/sales-pipeline"
                 element={<AdminReportsSalesPipeline />}
+              />
+              <Route
+                path="reports/customer-detail"
+                element={<AdminReportCustomerDetail />}
               />
               <Route
                 path="reports/opportunities-won"

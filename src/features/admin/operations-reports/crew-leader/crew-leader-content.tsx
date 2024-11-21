@@ -222,12 +222,13 @@ const CrewLeaderContent: React.FC = () => {
                     <Space direction="vertical" size={12} className="pl-2">
                       <Select
                         size={"middle"}
-                        defaultValue="Sales Rep"
+                        defaultValue="Crew Leader"
                         onChange={() => {}}
+                        disabled
                         style={{ width: 100 }}
                         options={[
                           {
-                            label: "Sales Rep",
+                            label: "Crew Leader",
                             value: 1,
                           },
                           {
