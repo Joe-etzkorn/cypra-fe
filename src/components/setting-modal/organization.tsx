@@ -5,6 +5,7 @@ import { cn } from "@utils/cn"
 import { useFormErrorHandler } from "@hooks/useFormErrorHandler"
 import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages"
 import { randomColor } from "@utils/common"
+import { useNavigate } from "react-router-dom"
 
 interface OrganizationInfo {
   firstName: string
@@ -25,6 +26,7 @@ const OrganizationAction = ({
   isInvite?: boolean
 }) => {
   const [form] = Form.useForm()
+  const navigate = useNavigate()
   const { formErrors, onFinishFailed, handleFieldsChange } =
     useFormErrorHandler()
 
@@ -33,6 +35,9 @@ const OrganizationAction = ({
     onClose()
     message.success("Successfully")
     form.resetFields()
+    if (isInvite) {
+      navigate("/admin-sales/dashboard")
+    }
   }
 
   return (

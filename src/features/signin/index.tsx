@@ -1,23 +1,51 @@
-import { Button, Checkbox, Form, Input } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
-import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
+import { Button, Checkbox, Form, Input } from "antd"
+import { useNavigate, useLocation } from "react-router-dom"
+import { useFormErrorHandler } from "@hooks/useFormErrorHandler"
+import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages"
+import { useMutation } from "@tanstack/react-query"
+import { AuthService } from "../../services/auth.service"
+import { message } from "antd"
+import Cookies from "js-cookie"
+import { COOKIE_ITEM } from "@constants/common"
 
 const SignIn = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const message = location.state?.message || "";
-  const subMessage = location.state?.subMessage || "";
+  const navigate = useNavigate()
+  const location = useLocation()
+  const messageLocation = location.state?.message || ""
+  const subMessage = location.state?.subMessage || ""
+
+  const { mutate: signIn, isPending } = useMutation({
+    mutationFn: AuthService.login,
+    mutationKey: ["/auth/login"],
+  })
 
   const handleTroubleSignIn = () => {
-    navigate("/trouble-signin");
-  };
+    navigate("/trouble-signin")
+  }
 
   const handleSignup = () => {
-    navigate("/get-started");
-  };
+    navigate("/get-started")
+  }
 
-  const { formErrors, onFinishFailed, handleFieldsChange } = useFormErrorHandler();
+  const { formErrors, onFinishFailed, handleFieldsChange } =
+    useFormErrorHandler()
+
+  const handleSignIn = async (values: any) => {
+    signIn(values, {
+      onSuccess: (res) => {
+        message.success("Login success")
+        Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, res.data.accessToken)
+        navigate("/admin-sales/dashboard")
+      },
+      onError: (error) => {
+        if (error.message) {
+          message.error(error.message)
+        } else {
+          message.error("Login failed")
+        }
+      },
+    })
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -27,10 +55,10 @@ const SignIn = () => {
         </div>
         <h1
           className={`${
-            message ? "text-[35px]" : "text-[40px]"
+            messageLocation ? "text-[35px]" : "text-[40px]"
           } font-bold text-black`}
         >
-          {message || "Sign In"}
+          {messageLocation || "Sign In"}
         </h1>
         <p className="common-font-color px-8 mt-3 mb-10 text-xl">
           {subMessage ||
@@ -42,6 +70,7 @@ const SignIn = () => {
           layout="vertical"
           onFinishFailed={onFinishFailed}
           onFieldsChange={handleFieldsChange}
+          onFinish={handleSignIn}
         >
           <Form.Item
             label="Email"
@@ -88,6 +117,7 @@ const SignIn = () => {
               type="primary"
               htmlType="submit"
               className="w-full h-12 font-bold common-btn mt-10"
+              loading={isPending}
             >
               Sign in
             </Button>
@@ -101,7 +131,7 @@ const SignIn = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignIn;
+export default SignIn

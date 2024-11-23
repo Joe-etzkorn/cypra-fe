@@ -4,6 +4,8 @@ import SettingModal from "../../components/setting-modal";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMenuLayout } from "../../stores/menu-layout";
+import { COOKIE_ITEM } from "@constants/common";
+import Cookies from "js-cookie";
 
 const { Sider } = Layout;
 
@@ -28,6 +30,11 @@ const AdminAside: React.FC = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  const onLogout = () => {
+    Cookies.remove(COOKIE_ITEM.ACCESS_TOKEN)
+    navigate("/signin")
+  }
 
   return (
     <Sider
@@ -88,7 +95,10 @@ const AdminAside: React.FC = () => {
             className="text-xl mb-6 cursor-pointer bg-white rounded-3xl p-3 hover:text-blue-500"
             onClick={showModal}
           />
-          <LogoutOutlined className="text-xl cursor-pointer bg-white rounded-3xl p-3 hover:text-red-500" />
+          <LogoutOutlined
+            className="text-xl cursor-pointer bg-white rounded-3xl p-3 hover:text-red-500"
+            onClick={onLogout}
+          />
         </div>
       </div>
       <SettingModal
