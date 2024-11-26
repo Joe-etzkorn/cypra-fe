@@ -1,14 +1,46 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, message } from "antd";
+import { useMutation } from "@tanstack/react-query";
+import { UserService } from "../../services/user.service";
+import { useApiCredentials } from "@stores/apire-credentials";
+import { useAccountDetailInfo } from "@stores/account-detail-info";
 
 interface props {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const AdminPaymentSetup: React.FC<props> = ({ setStep }) => {
+  const { mutate: createUser, isPending } = useMutation({
+    mutationFn: UserService.createUser,
+    mutationKey: ["/users"],
+  });
+
+  const { apiCredentials } = useApiCredentials();
+  const { accountDetailInfo } = useAccountDetailInfo();
 
   const handleSubmit = () => {
-    setStep(6);
+    if (!apiCredentials || !accountDetailInfo) return;
+
+    createUser(
+      {
+        ...apiCredentials,
+        ...accountDetailInfo,
+      },
+      {
+        onSuccess: (res) => {
+          console.log(res);
+          message.success("Create user success");
+          setStep(6);
+        },
+        onError: (error) => {
+          if (error.message) {
+            message.error(error.message);
+          } else {
+            message.error("Create user failed");
+          }
+        },
+      },
+    );
   };
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -24,7 +56,12 @@ const AdminPaymentSetup: React.FC<props> = ({ setStep }) => {
             there, you will be redirected back.
           </p>
 
-          <Button type="primary" className="mt-10 common-btn" onClick={handleSubmit}>
+          <Button
+            type="primary"
+            className="mt-10 common-btn"
+            onClick={handleSubmit}
+            loading={isPending}
+          >
             Continue to Stripe
           </Button>
         </div>

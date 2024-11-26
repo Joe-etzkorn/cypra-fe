@@ -1,5 +1,6 @@
 import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
 import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
+import { useAccountDetailInfo } from "@stores/account-detail-info";
 import { Button, Form, Input } from "antd";
 
 interface props {
@@ -9,8 +10,18 @@ interface props {
 const AdminAccountDetails: React.FC<props> = ({ setStep }) => {
   const { formErrors, onFinishFailed, handleFieldsChange } =
     useFormErrorHandler();
+  const { setAccountDetailInfo } = useAccountDetailInfo();
 
-  const handleSubmit = () => {
+  const handleSubmit = (values: any) => {
+    const accountDetailInfo = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      password: values.password,
+      companyName: values.companyName,
+      //hard code email
+      email: "george@ofthejungle.com",
+    };
+    setAccountDetailInfo(accountDetailInfo);
     setStep(3);
   };
 

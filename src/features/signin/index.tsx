@@ -7,6 +7,7 @@ import { AuthService } from "../../services/auth.service"
 import { message } from "antd"
 import Cookies from "js-cookie"
 import { COOKIE_ITEM } from "@constants/common"
+import { ROLE } from "@constants/role"
 
 const SignIn = () => {
   const navigate = useNavigate()
@@ -35,6 +36,7 @@ const SignIn = () => {
       onSuccess: (res) => {
         message.success("Login success")
         Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, res.data.accessToken)
+        Cookies.set(COOKIE_ITEM.ROLE, ROLE.ADMIN)
         navigate("/admin-sales/dashboard")
       },
       onError: (error) => {

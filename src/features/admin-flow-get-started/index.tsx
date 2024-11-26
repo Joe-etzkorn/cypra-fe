@@ -7,7 +7,7 @@ import AdminPaymentSetup from "@features/admin-flow-get-started/payment-setup";
 import AdminThankYou from "@features/admin-flow-get-started/thank-you";
 
 const AdminSetup: React.FC = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
 
 
   return (
