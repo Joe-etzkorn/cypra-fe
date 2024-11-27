@@ -1,9 +1,10 @@
-import React from "react";
-import { Button, Form, Input, message } from "antd";
+import { METHOD } from "@constants/common";
 import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
 import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
-import { ASPIRE_API_URL, METHOD } from "@constants/common";
 import { useApiCredentials } from "@stores/apire-credentials";
+import { Button, Form, Input } from "antd";
+import React from "react";
+import { AspireService } from "../../services/aspire.service";
 
 interface props {
   setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -14,32 +15,15 @@ const AdminAspireIntegration: React.FC<props> = ({ setStep }) => {
     useFormErrorHandler();
   const { setApiCredentials } = useApiCredentials();
 
-  const validateAspireIntegration = async (values: any) => {
-    try {
-      const res = await fetch(`${ASPIRE_API_URL}/Authorization`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: METHOD.POST,
-        body: JSON.stringify({
-          ClientId: values.clientId,
-          Secret: values.clientSecret,
-        }),
-      });
-      if (!res.ok) {
-        const error = await res.json();
-        throw error;
-      }
-
-      return res.json();
-    } catch (error) {
-      message.error("Invalid credentials");
-      console.log(error);
-    }
-  };
-
   const handleSubmit = async (values: any) => {
-    const response = await validateAspireIntegration(values);
+    const response = await AspireService.sendAspireRequest(
+      METHOD.POST,
+      "Authorization",
+      {
+        ClientId: values.clientId,
+        Secret: values.clientSecret,
+      },
+    );
     if (response) {
       setApiCredentials(values);
       setStep(4);
