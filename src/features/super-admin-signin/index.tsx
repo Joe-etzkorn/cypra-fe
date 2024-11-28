@@ -1,53 +1,49 @@
-import { Button, Checkbox, Form, Input } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { COOKIE_ITEM } from "@constants/common";
 import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
 import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
-import { useMutation } from "@tanstack/react-query";
-import { AuthService } from "../../services/auth.service";
-import { message } from "antd";
+import { Button, Checkbox, Form, Input, message } from "antd";
 import Cookies from "js-cookie";
-import { COOKIE_ITEM } from "@constants/common";
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AwsService } from "../../services/aws-sign.service";
 import { ROLE } from "@constants/role";
+import { useState } from "react";
 
 const SuperAdminSignin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const messageLocation = location.state?.message || "";
   const subMessage = location.state?.subMessage || "";
-
-  const { mutate: signIn, isPending } = useMutation({
-    mutationFn: AuthService.login,
-    mutationKey: ["/auth/login"],
-  });
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { formErrors, onFinishFailed, handleFieldsChange } =
     useFormErrorHandler();
 
   const handleSignIn = async (values: any) => {
-    const variables = {
-      email: values.email,
-      password: values.password,
-      //using for super admin login
-      isSuperAdmin: true,
-    };
-    signIn(variables, {
-      onSuccess: (res) => {
-        message.success("Login success");
-        Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, res.data.accessToken);
+    try {
+      setLoading(true);
+      const signInOutput = await AwsService.awsSignIn({
+        username: values.email,
+        password: values.password,
+      });
+
+      if (signInOutput?.isSignedIn) {
+        message.success("Login successful");
+
+        const accessToken =
+          signInOutput.authSession.tokens?.accessToken.toString() ?? "";
+        Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, accessToken);
         Cookies.set(COOKIE_ITEM.ROLE, ROLE.SUPER_ADMIN);
         navigate("/account-request");
-      },
-      onError: (error) => {
-        if (error.message) {
-          message.error(error.message);
-        } else {
-          message.error("Login failed");
-        }
-      },
-    });
+      } else {
+        console.log("nextStep", signInOutput?.nextStep);
+      }
+    } catch (error: any) {
+      message.error(error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
-
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-[#F4F6F6] p-12 rounded-3xl shadow-lg text-center w-[556px]">
@@ -117,7 +113,7 @@ const SuperAdminSignin = () => {
               type="primary"
               htmlType="submit"
               className="w-full h-12 font-bold common-btn mt-10"
-              loading={isPending}
+              loading={loading}
             >
               Sign in
             </Button>

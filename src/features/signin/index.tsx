@@ -1,53 +1,56 @@
-import { Button, Checkbox, Form, Input } from "antd"
-import { useNavigate, useLocation } from "react-router-dom"
-import { useFormErrorHandler } from "@hooks/useFormErrorHandler"
-import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages"
-import { useMutation } from "@tanstack/react-query"
-import { AuthService } from "../../services/auth.service"
-import { message } from "antd"
-import Cookies from "js-cookie"
-import { COOKIE_ITEM } from "@constants/common"
-import { ROLE } from "@constants/role"
+import { COOKIE_ITEM } from "@constants/common";
+import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
+import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
+import { Button, Checkbox, Form, Input, message } from "antd";
+import Cookies from "js-cookie";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AwsService } from "../../services/aws-sign.service";
+import { ROLE } from "@constants/role";
+import { useState } from "react";
 
 const SignIn = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const messageLocation = location.state?.message || ""
-  const subMessage = location.state?.subMessage || ""
-
-  const { mutate: signIn, isPending } = useMutation({
-    mutationFn: AuthService.login,
-    mutationKey: ["/auth/login"],
-  })
+  const navigate = useNavigate();
+  const location = useLocation();
+  const messageLocation = location.state?.message || "";
+  const subMessage = location.state?.subMessage || "";
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleTroubleSignIn = () => {
-    navigate("/trouble-signin")
-  }
+    navigate("/trouble-signin");
+  };
 
   const handleSignup = () => {
-    navigate("/get-started")
-  }
+    navigate("/get-started");
+  };
 
   const { formErrors, onFinishFailed, handleFieldsChange } =
-    useFormErrorHandler()
+    useFormErrorHandler();
 
   const handleSignIn = async (values: any) => {
-    signIn(values, {
-      onSuccess: (res) => {
-        message.success("Login success")
-        Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, res.data.accessToken)
-        Cookies.set(COOKIE_ITEM.ROLE, ROLE.ADMIN)
-        navigate("/admin-sales/dashboard")
-      },
-      onError: (error) => {
-        if (error.message) {
-          message.error(error.message)
-        } else {
-          message.error("Login failed")
-        }
-      },
-    })
-  }
+    try {
+      setLoading(true);
+      const signInOutput = await AwsService.awsSignIn({
+        username: values.email,
+        password: values.password,
+      });
+
+      if (signInOutput?.isSignedIn) {
+        const accessToken =
+          signInOutput.authSession.tokens?.accessToken.toString() ?? "";
+
+        message.success("Login successful");
+        Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, accessToken);
+        Cookies.set(COOKIE_ITEM.ROLE, ROLE.ADMIN);
+        navigate("/admin-sales/dashboard");
+      } else {
+        console.log("nextStep", signInOutput?.nextStep);
+      }
+    } catch (error: any) {
+      message.error(error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -119,7 +122,7 @@ const SignIn = () => {
               type="primary"
               htmlType="submit"
               className="w-full h-12 font-bold common-btn mt-10"
-              loading={isPending}
+              loading={loading}
             >
               Sign in
             </Button>
@@ -133,7 +136,7 @@ const SignIn = () => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;

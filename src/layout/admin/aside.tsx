@@ -13,6 +13,7 @@ import { useMenuLayout } from "../../stores/menu-layout";
 import { COOKIE_ITEM } from "@constants/common";
 import Cookies from "js-cookie";
 import { cn } from "@utils/cn";
+import { AwsService } from "../../services/aws-sign.service";
 
 const { Sider } = Layout;
 
@@ -39,14 +40,19 @@ const AdminAside: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const onLogout = () => {
-    Cookies.remove(COOKIE_ITEM.ACCESS_TOKEN);
-    Cookies.remove(COOKIE_ITEM.ROLE);
+  const onLogout = async () => {
+    try {
+      await AwsService.awsSignOut();
+      Cookies.remove(COOKIE_ITEM.ACCESS_TOKEN);
+      Cookies.remove(COOKIE_ITEM.ROLE);
 
-    if (role === ROLE.ADMIN) {
-      navigate("/signin");
-    } else {
-      navigate("/super-admin-signin");
+      if (role === ROLE.ADMIN) {
+        navigate("/signin");
+      } else {
+        navigate("/super-admin-signin");
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
     }
   };
 

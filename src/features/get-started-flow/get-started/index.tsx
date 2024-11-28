@@ -1,7 +1,9 @@
 import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
 import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
-import { Button, Form, Input, Radio, Space } from "antd";
+import { useMutation } from "@tanstack/react-query";
+import { Button, Form, Input, message, Radio, Space } from "antd";
 import { useState } from "react";
+import { UserService } from "../../../services/user.service";
 const { TextArea } = Input;
 
 const GetStarted = () => {
@@ -10,8 +12,25 @@ const GetStarted = () => {
 
   const [status, setStatus] = useState(false);
   const [usedAspire, setUsedAspire] = useState(true);
-  const handleSubmit = () => {
-    setStatus(true);
+  const { mutate: createAccountRequest, isPending } = useMutation({
+    mutationFn: UserService.createAccountRequest,
+    mutationKey: ["/account-requests"],
+  });
+
+  const handleSubmit = (values: any) => {
+    createAccountRequest(values, {
+      onSuccess: () => {
+        message.success("Thanks for reaching out to us, we will get back to you soon.");
+        setStatus(true);
+      },
+      onError: (error) => {
+        if (error.message) {
+          message.error(error.message);
+        } else {
+          message.error("Something went wrong");
+        }
+      },
+    });
   };
 
   const handleCheckboxChange = (e: any) => {
@@ -150,15 +169,14 @@ const GetStarted = () => {
             </Form.Item>
           </div>
 
-          <Form.Item className="!mb-1">
+          <Form.Item className="!mb-1" name="hasUsedAspire" initialValue={true}>
             <Radio.Group
               className="float-left"
-              defaultValue={1}
               onChange={handleCheckboxChange}
             >
               <Space direction="vertical" className="items-start">
-                <Radio value={1}>Our team currently uses Aspire</Radio>
-                <Radio value={2}>
+                <Radio value={true}>Our team currently uses Aspire</Radio>
+                <Radio value={false}>
                   Our team uses a different API-enabled software
                 </Radio>
               </Space>
@@ -182,6 +200,7 @@ const GetStarted = () => {
               type="primary"
               htmlType="submit"
               className="h-12 font-bold common-btn mt-4 !w-[480px]"
+              loading={isPending}
             >
               Submit
             </Button>
