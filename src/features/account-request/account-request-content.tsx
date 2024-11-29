@@ -5,6 +5,7 @@ import {
   AccountRequestSources,
 } from "./account-request-mock";
 import { useState } from "react";
+import { RequestedAccountService } from "../../services/requested-account.service";
 
 const { RangePicker } = DatePicker;
 
@@ -12,6 +13,12 @@ const { Content } = Layout;
 
 const AccountRequestContent = () => {
   const [page, setPage] = useState<number>(1);
+  
+  const requestedAccounts = async () => {
+    const abc = await RequestedAccountService.getRequestedAccounts({page: 1, limit: 10});
+    console.log(abc)
+  };
+  console.log(requestedAccounts())
 
   return (
     <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto max-w-[calc(100vw-8rem)] lg:max-w-[calc(100vw-24rem)]">

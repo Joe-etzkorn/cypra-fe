@@ -3,7 +3,7 @@ import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
 import { useMutation } from "@tanstack/react-query";
 import { Button, Form, Input, message, Radio, Space } from "antd";
 import { useState } from "react";
-import { UserService } from "../../../services/user.service";
+import { RequestedAccountService } from "../../../services/requested-account.service";
 const { TextArea } = Input;
 
 const GetStarted = () => {
@@ -13,7 +13,7 @@ const GetStarted = () => {
   const [status, setStatus] = useState(false);
   const [usedAspire, setUsedAspire] = useState(true);
   const { mutate: createAccountRequest, isPending } = useMutation({
-    mutationFn: UserService.createAccountRequest,
+    mutationFn: RequestedAccountService.createAccountRequest,
     mutationKey: ["/account-requests"],
   });
 

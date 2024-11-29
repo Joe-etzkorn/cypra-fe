@@ -10,34 +10,19 @@ interface CreateUserData {
   clientSecret: string;
 }
 
-interface CreateAccountRequestData {
-  name: string;
-  email: string;
-  companyName: string;
-  phone: string;
-  comment: string;
-  hasUsedAspire: boolean;
-}
-
 async function createUser(data: CreateUserData) {
-  const response = await httpMethod.POST({
-    url: "/users",
-    data: data,
-  });
-
-  return response;
-}
-
-async function createAccountRequest(data: CreateAccountRequestData) {
-  const response = await httpMethod.POST({
-    url: "/users/request-account",
-    data: data,
-  });
+  const response = await httpMethod.POST(
+    {
+      url: "/users",
+      data: data,
+    },
+    {},
+    false,
+  );
 
   return response;
 }
 
 export const UserService = {
   createUser,
-  createAccountRequest,
 };
