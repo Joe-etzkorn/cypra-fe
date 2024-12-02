@@ -3,8 +3,9 @@ import MainLayout from "@layout/index";
 import ProtectedRoute from "./protected-route";
 import { Suspense } from "react";
 import { Spin } from "antd";
-import RouteGuard from "./route-guard";
+import RouteGuard from "./route.guard";
 import { ROLE } from "./role";
+import AdminFlowGuard from "./admin-flow.guard";
 
 const createAppRouter = () =>
   createBrowserRouter([
@@ -71,7 +72,12 @@ const createAppRouter = () =>
       path: "/admin-setup",
       lazy: async () => {
         const AdminSetup = await import("@features/admin-flow-get-started");
-        return { Component: AdminSetup.default };
+        // return { Component: AdminSetup.default };
+        return {
+          Component: () => (
+            <AdminFlowGuard component={AdminSetup.default} />
+          ),
+        };
       },
     },
     {

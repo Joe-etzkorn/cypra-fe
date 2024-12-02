@@ -1,5 +1,6 @@
 import { httpMethod } from "@utils/api";
-import { Pagination } from "../types/common";
+import { GetRequestedAccountsParams } from "../types/request-account";
+import { REQUEST_URL } from "@constants/req-route";
 
 interface CreateAccountRequestData {
   name: string;
@@ -19,9 +20,51 @@ async function createAccountRequest(data: CreateAccountRequestData) {
   return response;
 }
 
-async function getRequestedAccounts(pagination: Pagination) {
+async function getRequestedAccounts(params: GetRequestedAccountsParams) {
+  const {
+    page,
+    limit,
+    searchValue = "",
+    hasUsedAspire,
+    requestedDateFrom,
+    requestedDateTo,
+  } = params;
+
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+    searchValue,
+    ...(hasUsedAspire !== undefined && {
+      hasUsedAspire: hasUsedAspire.toString(),
+    }),
+    ...(requestedDateFrom !== undefined && {
+      requestedDateFrom: requestedDateFrom.toString(),
+    }),
+    ...(requestedDateTo !== undefined && {
+      requestedDateTo: requestedDateTo.toString(),
+    }),
+  });
+
   const response = await httpMethod.GET({
-    url: `/requested-account?page=${pagination.page}&limit=${pagination.limit}`,
+    url: `${REQUEST_URL.REQUESTED_ACCOUNTS}?${queryParams.toString()}`,
+  });
+
+  return response;
+}
+
+async function generateAccountReqToken(requestedAccountId: number) {
+  const response = await httpMethod.POST({
+    url: REQUEST_URL.GENERATE_TOKEN,
+    data: { requestedAccountId },
+  });
+
+  return response;
+}
+
+async function verifyAccountReqToken(accountRequestToken: string) {
+  const response = await httpMethod.POST({
+    url: REQUEST_URL.VERIFY_TOKEN,
+    data: { token: accountRequestToken },
   });
 
   return response;
@@ -30,4 +73,6 @@ async function getRequestedAccounts(pagination: Pagination) {
 export const RequestedAccountService = {
   createAccountRequest,
   getRequestedAccounts,
+  generateAccountReqToken,
+  verifyAccountReqToken,
 };

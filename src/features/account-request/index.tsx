@@ -4,6 +4,7 @@ import AccountRequestContent from "./account-request-content";
 import SuperAdminNavigation from "@layout/super-admin/navigation";
 import { Drawer } from "antd";
 import { useMenuLayout } from "../../stores/menu-layout";
+import "./index.css";
 
 const AccountRequest: React.FC = () => {
   const { isOpenMenuLayout, toggleOpenMenuLayout } = useMenuLayout()

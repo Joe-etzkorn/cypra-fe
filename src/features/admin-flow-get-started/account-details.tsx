@@ -10,7 +10,7 @@ interface props {
 const AdminAccountDetails: React.FC<props> = ({ setStep }) => {
   const { formErrors, onFinishFailed, handleFieldsChange } =
     useFormErrorHandler();
-  const { setAccountDetailInfo } = useAccountDetailInfo();
+  const { accountDetailInfo, setAccountDetailInfo } = useAccountDetailInfo();
 
   const handleSubmit = (values: any) => {
     const accountDetailInfo = {
@@ -43,13 +43,19 @@ const AdminAccountDetails: React.FC<props> = ({ setStep }) => {
           onFinish={handleSubmit}
           onFinishFailed={onFinishFailed}
           onFieldsChange={handleFieldsChange}
+          initialValues={{
+            email: accountDetailInfo?.email,
+            firstName: accountDetailInfo?.firstName,
+            lastName: accountDetailInfo?.lastName,
+            companyName: accountDetailInfo?.companyName,
+          }}
         >
           <Form.Item
             label="Email"
             name="email"
             className="mb-2 common-font-color text-left"
           >
-            <p className="text-[#141922]">george@ofthejungle.com</p>
+            <p className="text-[#141922]">{accountDetailInfo?.email}</p>
           </Form.Item>
           <div className="flex space-x-4">
             <Form.Item

@@ -20,7 +20,9 @@ const GetStarted = () => {
   const handleSubmit = (values: any) => {
     createAccountRequest(values, {
       onSuccess: () => {
-        message.success("Thanks for reaching out to us, we will get back to you soon.");
+        message.success(
+          "Thanks for reaching out to us, we will get back to you soon.",
+        );
         setStatus(true);
       },
       onError: (error) => {
@@ -102,8 +104,17 @@ const GetStarted = () => {
               rules={[
                 { required: true, message: "Please input your name!" },
                 {
-                  min: 2,
-                  message: "Name must be at least 2 characters",
+                  validator: (_, value) => {
+                    if (!value) return Promise.resolve();
+
+                    const words = value.trim().split(/\s+/);
+                    if (words.length < 2) {
+                      return Promise.reject(
+                        "Please enter at least first name and last name",
+                      );
+                    }
+                    return Promise.resolve();
+                  },
                 },
               ]}
             >
@@ -170,10 +181,7 @@ const GetStarted = () => {
           </div>
 
           <Form.Item className="!mb-1" name="hasUsedAspire" initialValue={true}>
-            <Radio.Group
-              className="float-left"
-              onChange={handleCheckboxChange}
-            >
+            <Radio.Group className="float-left" onChange={handleCheckboxChange}>
               <Space direction="vertical" className="items-start">
                 <Radio value={true}>Our team currently uses Aspire</Radio>
                 <Radio value={false}>
