@@ -1,42 +1,61 @@
-import { Button, Form, Input, message } from "antd"
-import FieldItem from "./field-item"
-import { useState } from "react"
-import "./index.css"
-import { useFormErrorHandler } from "@hooks/useFormErrorHandler"
-import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages"
-
-interface ProfileInfo {
-  firstName: string
-  lastName: string
-  email: string
-  phoneNumber: string
-}
+import { Button, Form, Input, message } from "antd";
+import FieldItem from "./field-item";
+import { useState } from "react";
+import "./index.css";
+import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
+import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
+import { useMutation } from "@tanstack/react-query";
+import { UserService } from "../../services/user.service";
+import { useProfile } from "@stores/profile";
+import { IUserProfile } from "../../types/profile";
+import { REGEX } from "@utils/regex";
 
 const EditProfile = ({
   initialValues,
   onChangeProfile,
   onClose,
 }: {
-  initialValues: ProfileInfo
-  onChangeProfile: (profile: ProfileInfo) => void
-  onClose: () => void
+  initialValues: IUserProfile | null;
+  onChangeProfile: (profile: IUserProfile) => void;
+  onClose: () => void;
 }) => {
-  const [form] = Form.useForm()
-  const { formErrors, onFinishFailed, handleFieldsChange } = useFormErrorHandler();
-
-
-  const onSaveChanges = (values: ProfileInfo) => {
-    onChangeProfile(values)
-    onClose()
-    message.success("Profile updated successfully")
-    form.resetFields()
-  }
+  const [form] = Form.useForm();
+  const { formErrors, onFinishFailed, handleFieldsChange } =
+    useFormErrorHandler();
+  const { mutate: updateUser, isPending } = useMutation({
+    mutationFn: UserService.updateUser,
+  });
+  const onSaveChanges = (values: IUserProfile) => {
+    if (initialValues) {
+      updateUser(
+        {
+          id: initialValues.userCognitoId,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          phone: values.phone,
+        },
+        {
+          onSuccess: (data) => {
+            onClose();
+            message.success("Profile updated successfully");
+            form.resetFields();
+            if (data.data) {
+              onChangeProfile(values);
+            }
+          },
+          onError: () => {
+            message.error("Something went wrong");
+          },
+        },
+      );
+    }
+  };
 
   return (
     <Form
       form={form}
       layout="vertical"
-      initialValues={initialValues}
+      initialValues={initialValues || {}}
       onFinish={onSaveChanges}
       onFieldsChange={handleFieldsChange}
       onFinishFailed={onFinishFailed}
@@ -57,12 +76,22 @@ const EditProfile = ({
           <Input />
         </Form.Item>
       </div>
-      <FieldItem label="Email" value={initialValues.email} className="py-0" />
+      <FieldItem
+        label="Email"
+        value={initialValues?.email || ""}
+        className="py-0"
+      />
       <PasswordReset />
       <Form.Item
-        name="phoneNumber"
+        name="phone"
         label="Phone Number"
-        rules={[{ required: true }]}
+        rules={[
+          { required: true },
+          {
+            pattern: REGEX.AWS_PHONE_NUMBER,
+            message: "Invalid phone number",
+          },
+        ]}
       >
         <Input className="!max-w-[170px]" />
       </Form.Item>
@@ -73,13 +102,13 @@ const EditProfile = ({
         <Button onClick={onClose} className="!bg-[#F4F6F6]">
           Cancel
         </Button>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={isPending}>
           Save Changes
         </Button>
       </div>
     </Form>
-  )
-}
+  );
+};
 
 const PasswordReset = () => (
   <div className="py-2">
@@ -95,27 +124,27 @@ const PasswordReset = () => (
       </Button>
     </div>
   </div>
-)
+);
 
 const ProfileView = ({
   profile,
   onEdit,
 }: {
-  profile: ProfileInfo
-  onEdit: () => void
+  profile: IUserProfile | null;
+  onEdit: () => void;
 }) => (
   <>
     <div className="flex gap-4">
-      <FieldItem label="First Name" value={profile.firstName} />
-      <FieldItem label="Last Name" value={profile.lastName} />
+      <FieldItem label="First Name" value={profile?.firstName || ""} />
+      <FieldItem label="Last Name" value={profile?.lastName || ""} />
     </div>
-    <FieldItem label="Email" value={profile.email} />
+    <FieldItem label="Email" value={profile?.email || ""} />
     <div className="py-2">
       <div className="text-sm">Password</div>
       <div className="flex flex-row gap-2 items-center">
         <div className="text-lg font-semibold">••••••••••</div>
       </div>
-      <FieldItem label="Phone Number" value={profile.phoneNumber} />
+      <FieldItem label="Phone Number" value={profile?.phone || ""} />
     </div>
     <div className="flex justify-end gap-4 px-2 md:px-6">
       <Button onClick={onEdit} className="!bg-[#F4F6F6]">
@@ -123,16 +152,11 @@ const ProfileView = ({
       </Button>
     </div>
   </>
-)
+);
 
 const Profile = () => {
-  const [isEditProfile, setIsEditProfile] = useState(false)
-  const [profile, setProfile] = useState<ProfileInfo>({
-    firstName: "Henry",
-    lastName: "Wail",
-    email: "henry@henrywaill.com",
-    phoneNumber: "(123) 456-7890",
-  })
+  const [isEditProfile, setIsEditProfile] = useState(false);
+  const { profile, setProfile } = useProfile();
 
   return (
     <div className="flex flex-col justify-between px-2 md:px-6 py-4 h-full ">
@@ -147,7 +171,7 @@ const Profile = () => {
         <ProfileView profile={profile} onEdit={() => setIsEditProfile(true)} />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

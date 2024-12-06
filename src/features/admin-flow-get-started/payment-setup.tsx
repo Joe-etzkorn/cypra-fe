@@ -28,15 +28,14 @@ const AdminPaymentSetup: React.FC<props> = ({ setStep }) => {
       },
       {
         onSuccess: (res) => {
-          console.log(res);
-          message.success("Create user success");
+          message.success("Created user successully");
           setStep(6);
         },
         onError: (error) => {
           if (error.message) {
             message.error(error.message);
           } else {
-            message.error("Create user failed");
+            message.error("User create failed");
           }
         },
       },

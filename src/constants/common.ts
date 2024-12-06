@@ -4,6 +4,10 @@ export const COOKIE_ITEM = Object.freeze({
   ROLE: "cypra_user_role",
 })
 
+export const STORAGE_ITEM = Object.freeze({
+  USER_INFO: "cypra_user_info",
+})
+
 export const API_URL = import.meta.env.VITE_API_URL ?? ""
 
 export enum METHOD {

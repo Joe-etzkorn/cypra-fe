@@ -1,14 +1,5 @@
 import { httpMethod } from "@utils/api";
-
-interface CreateUserData {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  companyName: string;
-  clientId: string;
-  clientSecret: string;
-}
+import { CreateUserData, UpdateUserData } from "../types/user";
 
 async function createUser(data: CreateUserData) {
   const response = await httpMethod.POST(
@@ -23,6 +14,30 @@ async function createUser(data: CreateUserData) {
   return response;
 }
 
+async function updateUser(data: UpdateUserData) {
+  const response = await httpMethod.PUT({
+    url: `/users/${data.id}`,
+    data: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone,
+    },
+  });
+
+  return response;
+}
+
+async function getProfile(data: { email: string }) {
+  const response = await httpMethod.POST({
+    url: "/users/profile",
+    data: data,
+  });
+
+  return response;
+}
+
 export const UserService = {
   createUser,
+  updateUser,
+  getProfile
 };

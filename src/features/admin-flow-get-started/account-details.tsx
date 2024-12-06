@@ -18,8 +18,7 @@ const AdminAccountDetails: React.FC<props> = ({ setStep }) => {
       lastName: values.lastName,
       password: values.password,
       companyName: values.companyName,
-      //hard code email
-      email: "george@ofthejungle.com",
+      email: values.email,
     };
     setAccountDetailInfo(accountDetailInfo);
     setStep(3);

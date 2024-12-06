@@ -13,7 +13,7 @@ interface CreateAccountRequestData {
 
 async function createAccountRequest(data: CreateAccountRequestData) {
   const response = await httpMethod.POST({
-    url: "/requested-account",
+    url: REQUEST_URL.REQUESTED_ACCOUNTS,
     data: data,
   });
 

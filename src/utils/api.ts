@@ -2,13 +2,13 @@
 import { API_URL, COOKIE_ITEM, METHOD } from "@constants/common";
 import Cookies from "js-cookie";
 
-const token = Cookies.get(COOKIE_ITEM.ACCESS_TOKEN);
-
 const buildHeaders = (
   headers: HeadersInit = {},
   isJSON = true,
   isAuth = true,
 ) => {
+  const token = Cookies.get(COOKIE_ITEM.ACCESS_TOKEN);
+
   return {
     ...headers,
     ...(isJSON && { "Content-Type": "application/json" }),

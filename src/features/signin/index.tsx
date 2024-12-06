@@ -1,12 +1,16 @@
 import { COOKIE_ITEM } from "@constants/common";
+import { ROLE } from "@constants/role";
 import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
 import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
 import { Button, Checkbox, Form, Input, message } from "antd";
 import Cookies from "js-cookie";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AwsService } from "../../services/aws-sign.service";
-import { ROLE } from "@constants/role";
-import { useState } from "react";
+import { UserService } from "../../services/user.service";
+import { useMutation } from "@tanstack/react-query";
+import { useProfile } from "@stores/profile";
+import { AwsRole } from "../../types/user";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -14,6 +18,13 @@ const SignIn = () => {
   const messageLocation = location.state?.message || "";
   const subMessage = location.state?.subMessage || "";
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { mutate: getProfile, isPending } = useMutation({
+    mutationKey: ["user", "profile"],
+    mutationFn: UserService.getProfile,
+  });
+
+  const { setProfile } = useProfile();
 
   const handleTroubleSignIn = () => {
     navigate("/trouble-signin");
@@ -38,10 +49,37 @@ const SignIn = () => {
         const accessToken =
           signInOutput.authSession.tokens?.accessToken.toString() ?? "";
 
-        message.success("Login successful");
         Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, accessToken);
         Cookies.set(COOKIE_ITEM.ROLE, ROLE.ADMIN);
-        navigate("/admin-sales/dashboard");
+
+        const cognitoGroups =
+          signInOutput.authSession.tokens?.accessToken?.payload?.[
+            "cognito:groups"
+          ];
+
+        const userRole = (cognitoGroups as any)?.[0];
+        if (userRole !== AwsRole.ADMIN) {
+          message.error("You are not authorized to access this page");
+          await AwsService.awsSignOut();
+          return;
+        }
+
+        if (signInOutput.user?.attributes?.email) {
+          getProfile(
+            { email: signInOutput.user.attributes.email },
+            {
+              onSuccess: (data) => {
+                if (userRole === AwsRole.ADMIN) {
+                  message.success("Login successful");
+                  navigate("/admin-sales/dashboard");
+                  setProfile(data.data);
+                } else {
+                  message.error("You are not authorized to access this page");
+                }
+              },
+            },
+          );
+        }
       } else {
         console.log("nextStep", signInOutput?.nextStep);
       }
@@ -122,7 +160,7 @@ const SignIn = () => {
               type="primary"
               htmlType="submit"
               className="w-full h-12 font-bold common-btn mt-10"
-              loading={loading}
+              loading={loading || isPending}
             >
               Sign in
             </Button>

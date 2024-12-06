@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AwsService } from "../../services/aws-sign.service";
 import { ROLE } from "@constants/role";
 import { useState } from "react";
+import { AwsRole } from "../../types/user";
 
 const SuperAdminSignin = () => {
   const navigate = useNavigate();
@@ -28,13 +29,24 @@ const SuperAdminSignin = () => {
       });
 
       if (signInOutput?.isSignedIn) {
-        message.success("Login successful");
-
         const accessToken =
           signInOutput.authSession.tokens?.accessToken.toString() ?? "";
         Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, accessToken);
         Cookies.set(COOKIE_ITEM.ROLE, ROLE.SUPER_ADMIN);
-        navigate("/account-request");
+
+        const cognitoGroups =
+          signInOutput.authSession.tokens?.accessToken?.payload?.[
+            "cognito:groups"
+          ];
+
+        const userRole = (cognitoGroups as any)?.[0];
+
+        if (userRole === AwsRole.SUPER_ADMIN) {
+          message.success("Login successful");
+          navigate("/account-request");
+        } else {
+          message.error("You are not authorized to access this page");
+        }
       } else {
         console.log("nextStep", signInOutput?.nextStep);
       }

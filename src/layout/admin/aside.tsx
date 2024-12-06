@@ -10,10 +10,11 @@ import { ROLE } from "@constants/role";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMenuLayout } from "../../stores/menu-layout";
-import { COOKIE_ITEM } from "@constants/common";
+import { COOKIE_ITEM, STORAGE_ITEM } from "@constants/common";
 import Cookies from "js-cookie";
 import { cn } from "@utils/cn";
 import { AwsService } from "../../services/aws-sign.service";
+import { localStore } from "@utils/storage";
 
 const { Sider } = Layout;
 
@@ -45,6 +46,7 @@ const AdminAside: React.FC = () => {
       await AwsService.awsSignOut();
       Cookies.remove(COOKIE_ITEM.ACCESS_TOKEN);
       Cookies.remove(COOKIE_ITEM.ROLE);
+      localStore.remove(STORAGE_ITEM.USER_INFO);
 
       if (role === ROLE.ADMIN) {
         navigate("/signin");
