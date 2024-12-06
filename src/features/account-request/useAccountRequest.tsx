@@ -1,10 +1,15 @@
 import { ColumnsType } from "antd/es/table";
 import { RequestedAccount } from "../../types/request-account";
 import { dayFormat } from "@utils/common";
-import { Button, message, Space } from "antd";
-import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { Button, message, Space, Tooltip } from "antd";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  CopyOutlined,
+} from "@ant-design/icons";
 import { RequestedAccountService } from "../../services/requested-account.service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { cn } from "@utils/cn";
 
 //only using for account request
 export const useAccountRequest = () => {
@@ -81,9 +86,48 @@ export const useAccountRequest = () => {
       width: 150,
     },
     {
+      title: "OnBoarding URL",
+      dataIndex: "onBoardingLink",
+      align: "center",
+      width: 200,
+      render: (_, record) => {
+        const url = `${import.meta.env.VITE_URL}/admin-setup?token=${record?.token}`
+
+        return (
+          <Space>
+            <a
+              href={url}
+              target="_blank"
+              rel="noreferrer"
+              className={cn(
+                "text-[#007B84] cursor-pointer",
+                !record.token && "cursor-not-allowed text-gray-400",
+              )}
+            >
+              Link
+            </a>
+            <Tooltip title={record.token ? "Click to copy" : ""}>
+              <CopyOutlined
+                className={cn(
+                  "text-[#007B84] cursor-pointer",
+                  !record.token && "cursor-not-allowed text-gray-400",
+                )}
+                onClick={() => {
+                  if (!record.token) return;
+                  navigator.clipboard.writeText(url);
+                  message.success("URL copied to clipboard");
+                }}
+              />
+            </Tooltip>
+          </Space>
+        );
+      },
+    },
+    {
       title: "",
       key: "action",
       width: 100,
+      fixed: "right",
       render: (_, record) => (
         <Space size="middle">
           <Button danger disabled={record.hasExistedAccount || !!record.token}>

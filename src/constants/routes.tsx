@@ -6,6 +6,7 @@ import { Spin } from "antd";
 import RouteGuard from "./route.guard";
 import { ROLE } from "./role";
 import AdminFlowGuard from "./admin-flow.guard";
+import UserInvitedGuard from "./user-invited.guard";
 
 const createAppRouter = () =>
   createBrowserRouter([
@@ -56,7 +57,12 @@ const createAppRouter = () =>
       path: "/user-invited",
       lazy: async () => {
         const UserInvited = await import("@features/user-invited");
-        return { Component: UserInvited.default };
+        // return { Component: UserInvited.default };
+        return {
+          Component: () => (
+            <UserInvitedGuard component={UserInvited.default} />
+          ),
+        };
       },
     },
     {

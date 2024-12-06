@@ -58,27 +58,23 @@ const SignIn = () => {
           ];
 
         const userRole = (cognitoGroups as any)?.[0];
-        if (userRole !== AwsRole.ADMIN) {
-          message.error("You are not authorized to access this page");
-          await AwsService.awsSignOut();
-          return;
-        }
 
-        if (signInOutput.user?.attributes?.email) {
-          getProfile(
-            { email: signInOutput.user.attributes.email },
-            {
-              onSuccess: (data) => {
-                if (userRole === AwsRole.ADMIN) {
+        if (userRole === AwsRole.ADMIN || userRole === AwsRole.USER) {
+          if (signInOutput.user?.attributes?.email) {
+            getProfile(
+              { email: signInOutput.user.attributes.email },
+              {
+                onSuccess: (data) => {
                   message.success("Login successful");
                   navigate("/admin-sales/dashboard");
                   setProfile(data.data);
-                } else {
-                  message.error("You are not authorized to access this page");
-                }
+                },
               },
-            },
-          );
+            );
+          }
+        } else {
+          message.error("You are not authorized to access this page");
+          await AwsService.awsSignOut();
         }
       } else {
         console.log("nextStep", signInOutput?.nextStep);
@@ -168,7 +164,7 @@ const SignIn = () => {
         </Form>
         <p className="mt-4 common-font-color">
           Don’t have an account?{" "}
-          <a onClick={handleSignup} className="text-teal-600 font-bold">
+          <a onClick={handleSignup} className="text-teal-600 font-bold cursor-pointer">
             Get started
           </a>
         </p>

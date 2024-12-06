@@ -46,6 +46,7 @@ const SuperAdminSignin = () => {
           navigate("/account-request");
         } else {
           message.error("You are not authorized to access this page");
+          await AwsService.awsSignOut();
         }
       } else {
         console.log("nextStep", signInOutput?.nextStep);

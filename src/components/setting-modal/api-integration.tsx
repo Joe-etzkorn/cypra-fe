@@ -1,9 +1,10 @@
-import { Button } from "antd"
-import FieldItem from "./field-item"
+import { Button } from "antd";
+import FieldItem from "./field-item";
 
 const APIIntegration = () => {
   return (
-    <div className="px-6 pt-16 pb-4 flex flex-col justify-between h-full">
+    <div className="px-6 py-4 flex flex-col justify-between h-full">
+      <div className="text-2xl font-bold pb-2">Aspire API Integration</div>
       <div className="h-full">
         <FieldItem label="Client ID" value="fasdf dsfasdfs " />
         <FieldItem label="Secret" value="••••••••••" />
@@ -12,7 +13,7 @@ const APIIntegration = () => {
         <Button className="!bg-[#F4F6F6]">Update Credentials</Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default APIIntegration
+export default APIIntegration;

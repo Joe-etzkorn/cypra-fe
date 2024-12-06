@@ -9,13 +9,13 @@ export type CreateUserData = {
   password: string;
   firstName: string;
   lastName: string;
-  companyName: string;
-  clientId: string;
-  clientSecret: string;
+  companyName?: string;
+  clientId?: string;
+  clientSecret?: string;
 };
 
 export type UpdateUserData = {
-  id: string;
+  userCognitoId: string;
   firstName: string;
   lastName: string;
   phone: string;
@@ -26,3 +26,10 @@ export enum AwsRole {
   ADMIN = "Admin",
   USER = "User",
 }
+
+export type InviteUserData = {
+  userInvitedId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+};

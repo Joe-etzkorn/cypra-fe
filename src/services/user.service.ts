@@ -16,7 +16,7 @@ async function createUser(data: CreateUserData) {
 
 async function updateUser(data: UpdateUserData) {
   const response = await httpMethod.PUT({
-    url: `/users/${data.id}`,
+    url: `/users/${data.userCognitoId}`,
     data: {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -36,8 +36,22 @@ async function getProfile(data: { email: string }) {
   return response;
 }
 
+async function getUsersOrganization(params: { userId: number }) {
+  const { userId } = params;
+  const queryParams = new URLSearchParams({
+    userId: userId.toString(),
+  });
+
+  const response = await httpMethod.GET({
+    url: `/users/company-users?${queryParams.toString()}`,
+  });
+
+  return response;
+}
+
 export const UserService = {
   createUser,
   updateUser,
-  getProfile
+  getProfile,
+  getUsersOrganization,
 };

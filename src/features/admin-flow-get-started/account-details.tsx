@@ -2,7 +2,7 @@ import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
 import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
 import { useAccountDetailInfo } from "@stores/account-detail-info";
 import { Button, Form, Input } from "antd";
-
+import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 interface props {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -126,10 +126,13 @@ const AdminAccountDetails: React.FC<props> = ({ setStep }) => {
                 }),
               ]}
             >
-              <Input
+              <Input.Password
                 type="password"
                 className="h-12 w-full common-input"
                 placeholder="*********"
+                iconRender={(visible) =>
+                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
               />
             </Form.Item>
           </div>

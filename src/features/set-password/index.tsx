@@ -2,6 +2,7 @@ import { useFormErrorHandler } from "@hooks/useFormErrorHandler";
 import DisplayErrorMessages from "@layout/common-ui/displayErrorMessages";
 import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
+import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 
 const SetPassword = () => {
   const { formErrors, onFinishFailed, handleFieldsChange } = useFormErrorHandler();
@@ -51,10 +52,13 @@ const SetPassword = () => {
               },
             ]}
           >
-            <Input
+            <Input.Password
               type="password"
               className="h-12 w-full common-input"
               placeholder="*********"
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
           <Form.Item
@@ -73,10 +77,13 @@ const SetPassword = () => {
               }),
             ]}
           >
-            <Input
+            <Input.Password
               type="password"
               className="h-12 w-full common-input"
               placeholder="*********"
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
 

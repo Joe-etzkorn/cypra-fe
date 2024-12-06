@@ -9,6 +9,7 @@ import { UserService } from "../../services/user.service";
 import { useProfile } from "@stores/profile";
 import { IUserProfile } from "../../types/profile";
 import { REGEX } from "@utils/regex";
+import ProfileHeader from "./profile-header";
 
 const EditProfile = ({
   initialValues,
@@ -29,18 +30,18 @@ const EditProfile = ({
     if (initialValues) {
       updateUser(
         {
-          id: initialValues.userCognitoId,
+          userCognitoId: initialValues.userCognitoId,
           firstName: values.firstName,
           lastName: values.lastName,
           phone: values.phone,
         },
         {
           onSuccess: (data) => {
-            onClose();
             message.success("Profile updated successfully");
             form.resetFields();
             if (data.data) {
-              onChangeProfile(values);
+              onChangeProfile(data.data);
+              onClose();
             }
           },
           onError: () => {
@@ -160,7 +161,8 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col justify-between px-2 md:px-6 py-4 h-full ">
-      <div className="text-2xl font-bold py-2">Profile</div>
+      <ProfileHeader />
+
       {isEditProfile ? (
         <EditProfile
           initialValues={profile}

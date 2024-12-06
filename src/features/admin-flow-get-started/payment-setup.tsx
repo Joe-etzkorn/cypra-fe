@@ -27,8 +27,8 @@ const AdminPaymentSetup: React.FC<props> = ({ setStep }) => {
         ...accountDetailInfo,
       },
       {
-        onSuccess: (res) => {
-          message.success("Created user successully");
+        onSuccess: () => {
+          message.success("Created user successfully");
           setStep(6);
         },
         onError: (error) => {

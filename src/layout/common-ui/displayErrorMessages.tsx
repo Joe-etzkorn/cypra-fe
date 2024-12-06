@@ -10,9 +10,9 @@ const DisplayErrorMessages: React.FC<props> = ({ formErrors }) => {
   return (
     <div className="pt-4 text-left">
       {formErrors.map((error, index) => (
-        <Flex justify="flex-start" align="center">
+        <Flex key={index} justify="flex-start" align="center">
           <FontAwesomeIcon icon={faXmark} className="text-red-500 mr-2" />
-          <p key={index} className="text-red-500">
+          <p className="text-red-500">
             {error}
           </p>
         </Flex>
