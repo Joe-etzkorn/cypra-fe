@@ -180,6 +180,10 @@ const UserInvited = () => {
       <CreateUserSuccess
         open={openCreateSuccess}
         onClose={() => setOpenCreateSuccess(false)}
+        title="Account created successfully!"
+        description="Your account has been created successfully. Please sign in to continue."
+        navigateTo="/signin"
+        buttonText="Sign in"
       />
     </>
   );

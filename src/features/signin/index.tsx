@@ -48,10 +48,6 @@ const SignIn = () => {
       if (signInOutput?.isSignedIn) {
         const accessToken =
           signInOutput.authSession.tokens?.accessToken.toString() ?? "";
-
-        Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, accessToken);
-        Cookies.set(COOKIE_ITEM.ROLE, ROLE.ADMIN);
-
         const cognitoGroups =
           signInOutput.authSession.tokens?.accessToken?.payload?.[
             "cognito:groups"
@@ -60,6 +56,10 @@ const SignIn = () => {
         const userRole = (cognitoGroups as any)?.[0];
 
         if (userRole === AwsRole.ADMIN || userRole === AwsRole.USER) {
+
+          Cookies.set(COOKIE_ITEM.ACCESS_TOKEN, accessToken);
+          Cookies.set(COOKIE_ITEM.ROLE, ROLE.ADMIN);
+  
           if (signInOutput.user?.attributes?.email) {
             getProfile(
               { email: signInOutput.user.attributes.email },

@@ -8,4 +8,12 @@ export const REQUEST_URL = {
   //user invited
   USER_INVITED: "/user-invited",
   VERIFY_INVITED_TOKEN: "/user-invited/verify-token",
+  DELETE_USER: "/users",
+  //company users
+  COMPANY_USERS: "/users/company-users",
+  TOGGLE_ADMIN: "/users/toggle-admin",
+  //auth
+  FORGOT_PASSWORD: "/auth/forgot-password",
+  VERIFY_FORGOT_PASSWORD_TOKEN: "/auth/verify-token",
+  RESET_PASSWORD: "/auth/reset-password",
 };

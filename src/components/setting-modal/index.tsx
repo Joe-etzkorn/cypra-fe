@@ -6,6 +6,7 @@ import "./index.css"
 import Organization from "./organization"
 import Profile from "./profile"
 import Subscription from "./subscription"
+import { useProfile } from "@stores/profile"
 
 interface SettingModalProps {
   isModalVisible: boolean
@@ -18,7 +19,10 @@ const SettingModal: React.FC<SettingModalProps> = ({
   handleOk,
   handleCancel,
 }) => {
-  const [activeTab, setActiveTab] = useState("profile")
+  const [activeTab, setActiveTab] = useState("profile");
+  const { profile } = useProfile();
+
+  const limitedAccess = profile?.roleId === 3;
 
   const renderTab = () => {
     switch (activeTab) {
@@ -38,21 +42,32 @@ const SettingModal: React.FC<SettingModalProps> = ({
   const tabItems = [
     { key: "profile", label: "Profile" },
     { key: "organization", label: "Organization" },
-    { key: "apiIntegration", label: "API Integration" },
-    { key: "subscription", label: "Subscription" },
+    { 
+      key: "apiIntegration", 
+      label: "API Integration",
+      hidden: limitedAccess 
+    },
+    { 
+      key: "subscription", 
+      label: "Subscription",
+      hidden: limitedAccess 
+    },
   ]
 
-  const renderTabItem = (key: string, label: string) => (
-    <div
-      className={cn(
-        "py-1 hover:text-[#57B2C4] cursor-pointer text-lg font-semi",
-        activeTab === key && "text-[#57B2C4]",
-      )}
-      onClick={() => setActiveTab(key)}
-    >
-      {label}
-    </div>
-  )
+  const renderTabItem = (key: string, label: string, hidden?: boolean) => {
+    if (hidden) return null;
+    return (
+      <div
+        className={cn(
+          "py-1 hover:text-[#57B2C4] cursor-pointer text-lg font-semi",
+          activeTab === key && "text-[#57B2C4]",
+        )}
+        onClick={() => setActiveTab(key)}
+      >
+        {label}
+      </div>
+    )
+  }
 
   return (
     <Modal
@@ -69,7 +84,7 @@ const SettingModal: React.FC<SettingModalProps> = ({
             <div>
               <div className="text-2xl font-bold py-2">Settings</div>
               <div>
-                {tabItems.map((item) => renderTabItem(item.key, item.label))}
+                {tabItems.map((item) => renderTabItem(item.key, item.label, item.hidden))}
               </div>
             </div>
             <div

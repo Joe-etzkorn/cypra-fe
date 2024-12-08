@@ -1,0 +1,22 @@
+/** override ant design modal styles */
+.ant-modal-content {
+  border-radius: 24px !important;
+  padding: 0 !important;
+  font-family: "Figtree", sans-serif !important;
+  background-color: #f4f6f6 !important;
+}
+.ant-modal-footer {
+  margin-top: -2px !important;
+}
+.ant-form,
+.ant-form-item-label {
+  font-family: "Figtree", sans-serif !important;
+}
+
+.ant-modal-wrap {
+  backdrop-filter: blur(8px) !important;
+}
+
+.ant-form-item-explain-error {
+  display: none !important;
+}

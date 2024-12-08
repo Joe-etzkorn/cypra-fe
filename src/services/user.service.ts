@@ -1,5 +1,6 @@
 import { httpMethod } from "@utils/api";
 import { CreateUserData, UpdateUserData } from "../types/user";
+import { REQUEST_URL } from "@constants/req-route";
 
 async function createUser(data: CreateUserData) {
   const response = await httpMethod.POST(
@@ -49,9 +50,40 @@ async function getUsersOrganization(params: { userId: number }) {
   return response;
 }
 
+async function deleteUser(data: { userCognitoId: string; adminId: number }) {
+  const response = await httpMethod.DELETE({
+    url: REQUEST_URL.DELETE_USER,
+    data: {
+      userCognitoId: data.userCognitoId,
+      adminId: data.adminId,
+    },
+  });
+
+  return response;
+}
+
+async function toggleAdminPrivilege(data: {
+  userId: number;
+  adminId: number;
+  isAdmin: number;
+}) {
+  const response = await httpMethod.PUT({
+    url: REQUEST_URL.TOGGLE_ADMIN,
+    data: {
+      adminId: data.adminId,
+      userId: data.userId,
+      isAdministrator: data.isAdmin,
+    },
+  });
+
+  return response;
+}
+
 export const UserService = {
   createUser,
   updateUser,
   getProfile,
   getUsersOrganization,
+  deleteUser,
+  toggleAdminPrivilege,
 };

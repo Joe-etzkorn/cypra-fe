@@ -3,10 +3,11 @@ import MainLayout from "@layout/index";
 import ProtectedRoute from "./protected-route";
 import { Suspense } from "react";
 import { Spin } from "antd";
-import RouteGuard from "./route.guard";
+import RouteGuard from "../guards/route.guard";
 import { ROLE } from "./role";
-import AdminFlowGuard from "./admin-flow.guard";
-import UserInvitedGuard from "./user-invited.guard";
+import AdminFlowGuard from "../guards/admin-flow.guard";
+import UserInvitedGuard from "../guards/user-invited.guard";
+import ResetPasswordGuard from "../guards/reset-password.guard";
 
 const createAppRouter = () =>
   createBrowserRouter([
@@ -50,7 +51,12 @@ const createAppRouter = () =>
       path: "/set-password",
       lazy: async () => {
         const SetPassword = await import("@features/set-password");
-        return { Component: SetPassword.default };
+        // return { Component: SetPassword.default };
+        return {
+          Component: () => (
+            <ResetPasswordGuard component={SetPassword.default} />
+          ),
+        };
       },
     },
     {
