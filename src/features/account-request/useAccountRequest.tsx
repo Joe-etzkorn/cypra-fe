@@ -13,7 +13,7 @@ import { cn } from "@utils/cn";
 
 //only using for account request
 export const useAccountRequest = () => {
-  const { mutate: generateToken, isPending } = useMutation({
+  const { mutate: generateToken } = useMutation({
     mutationFn: RequestedAccountService.generateAccountReqToken,
   });
   const queryClient = useQueryClient();
@@ -91,7 +91,30 @@ export const useAccountRequest = () => {
       align: "center",
       width: 200,
       render: (_, record) => {
-        const url = `${import.meta.env.VITE_URL}/admin-setup?token=${record?.token}`
+        const url = `${import.meta.env.VITE_URL}/admin-setup?token=${
+          record?.token
+        }`;
+
+        const copyToClipboard = (text: string) => {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.style.position = "fixed";
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          try {
+            const successful = document.execCommand("copy");
+            if (successful) {
+              message.success("URL copied to clipboard");
+            } else {
+              message.error("Failed to copy URL");
+            }
+          } catch (err: any) {
+            console.log(err);
+            message.error("Failed to copy URL");
+          }
+          document.body.removeChild(textarea);
+        };
 
         return (
           <Space>
@@ -114,8 +137,7 @@ export const useAccountRequest = () => {
                 )}
                 onClick={() => {
                   if (!record.token) return;
-                  navigator.clipboard.writeText(url);
-                  message.success("URL copied to clipboard");
+                  copyToClipboard(url);
                 }}
               />
             </Tooltip>
@@ -136,7 +158,6 @@ export const useAccountRequest = () => {
           <Button
             disabled={record.hasExistedAccount || !!record.token}
             onClick={() => handleGenerateToken(record.id)}
-            loading={isPending}
           >
             Approve
           </Button>
