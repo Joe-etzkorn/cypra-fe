@@ -1,4 +1,4 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Popconfirm } from "antd";
 import FieldItem from "./field-item";
 import { useState } from "react";
 import "./index.css";
@@ -10,6 +10,7 @@ import { useProfile } from "@stores/profile";
 import { IUserProfile } from "../../types/profile";
 import { REGEX } from "@utils/regex";
 import ProfileHeader from "./profile-header";
+import { AuthService } from "@services/auth.service";
 
 const EditProfile = ({
   initialValues,
@@ -111,21 +112,57 @@ const EditProfile = ({
   );
 };
 
-const PasswordReset = () => (
-  <div className="py-2">
-    <div className="text-sm">Password</div>
-    <div className="flex flex-col gap-2 items-start md:flex-row md:items-center">
-      <div className="text-lg font-semibold">••••••••••</div>
-      <Button
-        danger
-        className="!rounded-lg !bg-[#F4F6F6]"
-        onClick={() => message.success("Reset password success")}
-      >
-        Reset Password
-      </Button>
+const PasswordReset = () => {
+  const { mutate: forgotPassword, isPending } = useMutation({
+    mutationFn: AuthService.forgotPassword,
+  });
+  const { profile } = useProfile();
+
+  const handleResetPassword = () => {
+    if (!profile) return;
+
+    forgotPassword(
+      {
+        email: profile?.email,
+      },
+      {
+        onSuccess: () => {
+          message.success("Password reset successfully, please check your email");
+        },
+        onError: (error: any) => {
+          if (error.message) {
+            message.error(error.message);
+          } else {
+            message.error("Something went wrong!");
+          }
+        },
+      });
+  };
+
+
+  return (
+    <div className="py-2">
+      <div className="text-sm">Password</div>
+      <div className="flex flex-col gap-2 items-start md:flex-row md:items-center">
+        <div className="text-lg font-semibold">••••••••••</div>
+        <Popconfirm
+          title="Are you sure you want to reset your password?"
+          onConfirm={handleResetPassword}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button
+            danger
+            loading={isPending}
+            className="!rounded-lg !bg-[#F4F6F6]"
+          >
+            Reset Password
+          </Button>
+        </Popconfirm>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ProfileView = ({
   profile,
