@@ -1,25 +1,39 @@
-import React from "react"
-import { Layout, Card, Row, Col, Flex, Table, Select } from "antd"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import DashboardSkeleton from "@components/dashboard-skeleton";
 import {
   faArrowTrendUp,
-  faRotateRight,
   faDownload,
+  faRotateRight,
   faSliders,
-} from "@fortawesome/free-solid-svg-icons"
-import { DatePicker, Space } from "antd"
-import { Bar, Doughnut } from "react-chartjs-2"
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { currencyFormat } from "@utils/common";
 import {
-  Chart as ChartJS,
+  Card,
+  Col,
+  DatePicker,
+  Flex,
+  Layout,
+  Row,
+  Select,
+  Space,
+  Table,
+} from "antd";
+import {
+  ArcElement,
   BarElement,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
   Tooltip,
-  Legend,
-  ArcElement,
-} from "chart.js"
-import { doughnutData, doughnutOptions } from "./doughnut-chart-data"
-import { SalesWonData, SalesWonOptions } from "./bar-chart-data"
+} from "chart.js";
+import React from "react";
+import { Bar, Doughnut } from "react-chartjs-2";
+import {
+  LeaderBoardDataType,
+  PipelineDataType,
+} from "../../../types/sales-dashboard";
+import { useSalesDashboard } from "./use-sales-dashboard";
 
 ChartJS.register(
   BarElement,
@@ -28,109 +42,28 @@ ChartJS.register(
   Tooltip,
   Legend,
   ArcElement,
-)
-const { Content } = Layout
-const { RangePicker } = DatePicker
-const { Column } = Table
-
-interface LeaderBoardDataType {
-  key: React.Key
-  name: string
-  branch: string
-  opportunities: number
-  salesWon: string
-  closeRate: string
-}
-
-const leaderBoardSource: LeaderBoardDataType[] = [
-  {
-    key: "1",
-    name: "Jeremy Flinkle",
-    branch: "Boston",
-    opportunities: 43,
-    salesWon: "$1,200,000",
-    closeRate: "70%",
-  },
-  {
-    key: "2",
-    name: "Sasha Smith",
-    branch: "Denver",
-    opportunities: 24,
-    salesWon: "$988,000",
-    closeRate: "73%",
-  },
-  {
-    key: "3",
-    name: "Rebecca Nyugen",
-    branch: "Boston",
-    opportunities: 47,
-    salesWon: "$703,000",
-    closeRate: "80%",
-  },
-  {
-    key: "4",
-    name: "Matt Weiss",
-    branch: "Boston",
-    opportunities: 48,
-    salesWon: "$703,000",
-    closeRate: "54%",
-  },
-  {
-    key: "5",
-    name: "Frank Frankel",
-    branch: "DC",
-    opportunities: 30,
-    salesWon: "$522,000",
-    closeRate: "49%",
-  },
-]
-interface PipelineDataType {
-  key: React.Key
-  stage: string
-  estimateCost: string
-  estimatedHours: number
-  opportunities: number
-}
-
-const pipelineSource: PipelineDataType[] = [
-  {
-    key: "1",
-    stage: "Bidding",
-    estimateCost: "$1,200,000",
-    estimatedHours: 25,
-    opportunities: 25,
-  },
-  {
-    key: "2",
-    stage: "Approved",
-    estimateCost: "$1,200,000",
-    estimatedHours: 25,
-    opportunities: 25,
-  },
-  {
-    key: "3",
-    stage: "Delivered",
-    estimateCost: "$1,200,000",
-    estimatedHours: 25,
-    opportunities: 25,
-  },
-  {
-    key: "4",
-    stage: "Won",
-    estimateCost: "$1,200,000",
-    estimatedHours: 25,
-    opportunities: 25,
-  },
-  {
-    key: "5",
-    stage: "Lost",
-    estimateCost: "$1,200,000",
-    estimatedHours: 25,
-    opportunities: 25,
-  },
-]
+);
+const { Content } = Layout;
+const { RangePicker } = DatePicker;
+const { Column } = Table;
 
 const SalesDashboardContent: React.FC = () => {
+  const {
+    sales,
+    proposals,
+    closeRate,
+    estimatedGrossMargin,
+    leaderBoardSource,
+    pipelineSource,
+    doughnutData,
+    salesWonData,
+    salesWonChart,
+    salesWonOptions,
+    doughnutOptions,
+    dataIndex,
+    loading,
+  } = useSalesDashboard();
+
   return (
     <Layout className="rounded-[32px] mx-6 mb-6 bg-[#F4F6F6] overflow-y-auto w-2/3 lg:w-full">
       <Content className="p-8 rounded-[32px]">
@@ -176,7 +109,10 @@ const SalesDashboardContent: React.FC = () => {
                 <div className="flex flex-col gap-2">
                   <p className="text-xl md:text-2xl text-[#141922]">Revenue</p>
                   <p className="text-3xl md:text-4xl font-semibold text-[#141922]">
-                    <span className="text-[#667174]">$</span>10,750,322
+                    <span className="text-[#667174]">$</span>
+                    <DashboardSkeleton loading={loading}>
+                      {currencyFormat(sales?.total.toFixed(2) || 0)}
+                    </DashboardSkeleton>
                   </p>
                   <p className="text-sm text-[#667174]">
                     vs previous $8,202,093
@@ -194,7 +130,10 @@ const SalesDashboardContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Proposals Pending</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                <span className="text-[#667174]">$</span>3,150,000
+                <span className="text-[#667174]">$</span>
+                <DashboardSkeleton loading={loading}>
+                  {currencyFormat(proposals?.total.toFixed(2) || 0)}
+                </DashboardSkeleton>
               </p>
               <p className="text-sm text-[#667174] pt-1">
                 75 Opportunities Delivered Status
@@ -206,7 +145,10 @@ const SalesDashboardContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Close Rate</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                52.3<span className="text-[#667174]">%</span>
+                <DashboardSkeleton loading={loading}>
+                  {closeRate?.count.toFixed(1) || 0}
+                </DashboardSkeleton>
+                <span className="text-[#667174]">%</span>
               </p>
               <p className="text-sm text-[#667174] pt-1">vs previous period</p>
             </Card>
@@ -216,12 +158,28 @@ const SalesDashboardContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Estimated Gross Margin</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                48.9<span className="text-[#667174]">%</span>
+                <DashboardSkeleton loading={loading}>
+                  {estimatedGrossMargin?.count ? (
+                    <>
+                      {estimatedGrossMargin?.count?.toFixed(1)}
+                      <span className="text-[#667174]">$</span>
+                    </>
+                  ) : (
+                    0
+                  )}
+                </DashboardSkeleton>
               </p>
               <p className="text-sm text-[#667174] pt-1">vs previous period</p>
             </Card>
           </Col>
-          <Col xxl={16} xl={16} lg={24} md={24} xs={24} className="flex flex-col">
+          <Col
+            xxl={16}
+            xl={16}
+            lg={24}
+            md={24}
+            xs={24}
+            className="flex flex-col"
+          >
             <Card className="bg-white rounded-2xl shadow-lg h-full min-h-[344px] flex-1">
               <Flex justify="space-between" align="center" wrap>
                 <p className="text-lg md:text-xl text-[#667174] whitespace-nowrap">
@@ -334,22 +292,42 @@ const SalesDashboardContent: React.FC = () => {
                     <Flex className="flex-col text-white gap-1 pl-5">
                       <div>
                         <h4>Revenue</h4>
-                        <p className="font-bold">$29,110.04</p>
+                        <p className="font-bold">
+                          $
+                          <DashboardSkeleton loading={loading}>
+                            {currencyFormat(
+                              salesWonChart?.monthlyRevenue?.[
+                                dataIndex
+                              ]?.toFixed(2) || 0,
+                            )}
+                          </DashboardSkeleton>
+                        </p>
                       </div>
                       <div>
                         <h4>Sales Won</h4>
-                        <p className="font-bold">94</p>
+                        <p className="font-bold">
+                          <DashboardSkeleton loading={loading}>
+                            {salesWonChart?.monthlyTotalWon?.[dataIndex] || 0}
+                          </DashboardSkeleton>
+                        </p>
                       </div>
                       <div>
                         <h4>Close Rate</h4>
-                        <p className="font-bold">49.2%</p>
+                        <p className="font-bold">
+                          <DashboardSkeleton loading={loading}>
+                            {salesWonChart?.monthlyCloseRate?.[
+                              dataIndex
+                            ]?.toFixed(2) || 0}
+                          </DashboardSkeleton>
+                          %
+                        </p>
                       </div>
                     </Flex>
                   </Card>
                 </Col>
                 <Col xl={18} lg={15} md={24}>
                   <div className="h-full rounded-lg flex items-center justify-center">
-                    <Bar data={SalesWonData} options={SalesWonOptions} />
+                    <Bar data={salesWonData} options={salesWonOptions} />
                   </div>
                 </Col>
               </Row>
@@ -457,7 +435,7 @@ const SalesDashboardContent: React.FC = () => {
         </Row>
       </Content>
     </Layout>
-  )
-}
+  );
+};
 
-export default SalesDashboardContent
+export default SalesDashboardContent;

@@ -58,6 +58,7 @@ const SettingModal: React.FC<SettingModalProps> = ({
     if (hidden) return null;
     return (
       <div
+        key={key}
         className={cn(
           "py-1 hover:text-[#57B2C4] cursor-pointer text-lg font-semi",
           activeTab === key && "text-[#57B2C4]",

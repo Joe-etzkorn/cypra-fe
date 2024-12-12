@@ -16,3 +16,9 @@ export const getInitials = (name: string) => {
     .join("")
     .toUpperCase();
 };
+
+export const currencyFormat = (number: any): string => {
+  return new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 10,
+  }).format(number || 0)
+}

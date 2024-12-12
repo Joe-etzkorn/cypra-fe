@@ -1,20 +1,37 @@
-import React from "react";
-import { Layout, Card, Row, Col, Flex, Table, Select, DatePicker } from "antd";
+/* eslint-disable no-useless-escape */
+import DashboardSkeleton from "@components/dashboard-skeleton";
+import { faDownload, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRotateRight, faDownload } from "@fortawesome/free-solid-svg-icons";
-import { Space } from "antd";
-import { Doughnut } from "react-chartjs-2";
+import { currencyFormat } from "@utils/common";
 import {
-  Chart as ChartJS,
+  Card,
+  Col,
+  DatePicker,
+  Flex,
+  Layout,
+  Row,
+  Select,
+  Space,
+  Table,
+} from "antd";
+import {
+  ArcElement,
   BarElement,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
   Tooltip,
-  Legend,
-  ArcElement,
 } from "chart.js";
-import { doughnutData, doughnutOptions } from "./doughnut-chart-data";
-import { ColumnsType } from "antd/es/table";
+import React from "react";
+import { Doughnut } from "react-chartjs-2";
+import {
+  OpportunityItem,
+  WonLostItem,
+} from "../../../../types/report-pipeline";
+import { doughnutOptions } from "./doughnut-chart-data";
+import { useSalesPipeline } from "./use-sales-pipeline";
+import { useSalesPipelinePagination } from "@stores/use-sales-pipeline-pagination";
 
 ChartJS.register(
   BarElement,
@@ -22,284 +39,44 @@ ChartJS.register(
   LinearScale,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
 );
 const { Content } = Layout;
-
-interface BiddingDataType {
-  key: React.Key;
-  property: string;
-  division: string;
-  name: string;
-  estHrs: number;
-  estProfit: string;
-}
-
-const biddingSource: BiddingDataType[] = [
-  {
-    key: 1,
-    property: "Williams",
-    division: "Construction",
-    name: "Front Lawn",
-    estHrs: 43,
-    estProfit: "$1,200,000",
-  },
-  {
-    key: 2,
-    property: "Cheyenne",
-    division: "Landscape",
-    name: "Garden Edging",
-    estHrs: 24,
-    estProfit: "$988,000",
-  },
-  {
-    key: 3,
-    property: "Dawson",
-    division: "Construction",
-    name: "Deck Staircase",
-    estHrs: 47,
-    estProfit: "$765,300",
-  },
-  {
-    key: 4,
-    property: "Williams",
-    division: "Construction",
-    name: "Poolhouse",
-    estHrs: 48,
-    estProfit: "$703,000",
-  },
-  {
-    key: 5,
-    property: "Goodhue",
-    division: "Landscape",
-    name: "Sidewalk",
-    estHrs: 30,
-    estProfit: "$522,000",
-  },
-  {
-    key: 6,
-    property: "Goodhue",
-    division: "Landscape",
-    name: "Sidewalk",
-    estHrs: 30,
-    estProfit: "$522,000",
-  },
-];
-
-const biddingColumns: ColumnsType<BiddingDataType> = [
-  { title: "Property", dataIndex: "property", key: "property" },
-  { title: "Division", dataIndex: "division", key: "division" },
-  { title: "Name", dataIndex: "name", key: "name" },
-  { title: "Est. Hrs.", dataIndex: "estHrs", key: "estHrs" },
-  { title: "Est. Profit", dataIndex: "estProfit", key: "estProfit" },
-  {
-    title: "",
-    key: "action",
-    render: (_: any, _record: BiddingDataType) => (
-      <Space size="middle">
-        <a className="text-[#57B2C4]">Copy id</a>
-      </Space>
-    ),
-  },
-];
-
-interface DeliveredDataType {
-  key: React.Key;
-  age: string;
-  property: string;
-  division: string;
-  name: string;
-  estHrs: number;
-  estProfit: string;
-}
-
-const deliveredSource: DeliveredDataType[] = [
-  {
-    key: 1,
-    age: "1D",
-    property: "Williams",
-    division: "Construction",
-    name: "Sidewalk",
-    estHrs: 43,
-    estProfit: "$1,200,000",
-  },
-  {
-    key: 2,
-    age: "1D",
-    property: "Goodhue",
-    division: "Landscape",
-    name: "Front Lawn",
-    estHrs: 24,
-    estProfit: "$988,000",
-  },
-  {
-    key: 3,
-    age: "2D",
-    property: "Cheyenne",
-    division: "Landscape",
-    name: "Front Lawn",
-    estHrs: 47,
-    estProfit: "$765,300",
-  },
-  {
-    key: 4,
-    age: "2D",
-    property: "Dawson",
-    division: "Construction",
-    name: "Garden Edging",
-    estHrs: 48,
-    estProfit: "$703,000",
-  },
-  {
-    key: 5,
-    age: "2D",
-    property: "Dawson",
-    division: "Construction",
-    name: "Deck Staircase",
-    estHrs: 48,
-    estProfit: "$703,000",
-  },
-  {
-    key: 6,
-    age: "3D",
-    property: "Williams",
-    division: "Landscape",
-    name: "Poolhouse",
-    estHrs: 30,
-    estProfit: "$522,000",
-  },
-  {
-    key: 7,
-    age: "3D",
-    property: "Goodhue",
-    division: "Construction",
-    name: "Sidewalk",
-    estHrs: 30,
-    estProfit: "$522,000",
-  },
-];
-
-const deliveredColumns: ColumnsType<DeliveredDataType> = [
-  {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
-    render: (age: string) => (
-      <span className={age === "3D" ? "text-red-500" : ""}>{age}</span>
-    ),
-  },
-  { title: "Property", dataIndex: "property", key: "property" },
-  { title: "Division", dataIndex: "division", key: "division" },
-  { title: "Name", dataIndex: "name", key: "name" },
-  { title: "Est. Hrs.", dataIndex: "estHrs", key: "estHrs" },
-  { title: "Est. Profit", dataIndex: "estProfit", key: "estProfit" },
-  {
-    title: "",
-    key: "action",
-    render: () => (
-      <Space size="middle">
-        <a className="text-[#57B2C4]">Copy id</a>
-      </Space>
-    ),
-  },
-];
-
-interface OpportunityDataType {
-  key: React.Key;
-  status: string;
-  date: string;
-  property: string;
-  division: string;
-  name: string;
-  estHrs: number;
-  estProfit: string;
-}
-
-const opportunitiesSource: OpportunityDataType[] = [
-  {
-    key: 1,
-    status: "Won",
-    date: "10/21/24",
-    property: "Williams",
-    division: "Boston",
-    name: "Front Lawn",
-    estHrs: 43,
-    estProfit: "$1,200,000",
-  },
-  {
-    key: 2,
-    status: "Won",
-    date: "10/22/24",
-    property: "Cheyenne",
-    division: "Denver",
-    name: "Garden Edging",
-    estHrs: 24,
-    estProfit: "$988,000",
-  },
-  {
-    key: 3,
-    status: "Lost",
-    date: "10/22/24",
-    property: "Dawson",
-    division: "Boston",
-    name: "Deck Staircase",
-    estHrs: 47,
-    estProfit: "$765,300",
-  },
-  {
-    key: 4,
-    status: "Lost",
-    date: "10/22/24",
-    property: "Williams",
-    division: "Boston",
-    name: "Poolhouse",
-    estHrs: 48,
-    estProfit: "$703,000",
-  },
-  {
-    key: 5,
-    status: "Won",
-    date: "10/23/24",
-    property: "Goodhue",
-    division: "DC",
-    name: "Sidewalk",
-    estHrs: 30,
-    estProfit: "$522,000",
-  },
-  {
-    key: 6,
-    status: "Lost",
-    date: "10/23/24",
-    property: "Goodhue",
-    division: "DC",
-    name: "Sidewalk",
-    estHrs: 30,
-    estProfit: "$522,000",
-  },
-];
-
-const opportunitiesColumns: ColumnsType<OpportunityDataType> = [
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-    render: (status: string) => (
-      <span className={status === "Won" ? "text-green-500" : "text-red-500"}>
-        {status}
-      </span>
-    ),
-  },
-  { title: "Date", dataIndex: "date", key: "date" },
-  { title: "Property", dataIndex: "property", key: "property" },
-  { title: "Division", dataIndex: "division", key: "division" },
-  { title: "Name", dataIndex: "name", key: "name" },
-  { title: "Est. Hours", dataIndex: "estHrs", key: "estHrs" },
-  { title: "Est. Profit", dataIndex: "estProfit", key: "estProfit" },
-];
 
 const { RangePicker } = DatePicker;
 
 const SalesPipelineContent: React.FC = () => {
+  const {
+    pendingOpportunities,
+    pendingEstimatedDollars,
+    biddingCount,
+    deliveredCount,
+    mostActiveDivision,
+    averageSalesCycle,
+    biddingSource,
+    deliveredSource,
+    wonLostSource,
+    doughnutData,
+    isLoading,
+    biddingColumns,
+    deliveredColumns,
+    opportunitiesColumns,
+    biddingTableLoading,
+    deliveredTableLoading,
+    wonLostLoading,
+    biddingTotal,
+    deliveredTotal,
+    opportunitiesTotal,
+  } = useSalesPipeline();
+  const {
+    biddingPage,
+    deliveredPage,
+    opportunitiesPage,
+    setBiddingPage,
+    setDeliveredPage,
+    setOpportunitiesPage,
+  } = useSalesPipelinePagination();
+
   return (
     <Layout className="rounded-[32px] mx-6 mb-6 bg-[#F4F6F6] overflow-y-auto">
       <Content className="p-8 rounded-[32px]">
@@ -418,13 +195,18 @@ const SalesPipelineContent: React.FC = () => {
             <Card className="bg-[#F4F6F6] border-none ant-card-custom-padding">
               <div className="flex flex-col gap-1">
                 <p className="text-[40px] leading-[48px] font-semibold text-[#141922]">
-                  14
+                  <DashboardSkeleton loading={isLoading}>
+                    {pendingOpportunities || 0}
+                  </DashboardSkeleton>
                 </p>
                 <p className="text-xl font-semibold text-[#141922]">
                   Pending Opportunities
                 </p>
                 <p className="text-sm text-[#667174]">
-                  $42,000 estimated dollars
+                  <DashboardSkeleton loading={isLoading}>
+                    ${currencyFormat((pendingEstimatedDollars || 0).toFixed(2))}{" "}
+                    estimated dollars
+                  </DashboardSkeleton>
                 </p>
               </div>
             </Card>
@@ -432,23 +214,37 @@ const SalesPipelineContent: React.FC = () => {
           <Col xxl={4} xl={6} lg={6} md={6} sm={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center border-[#57B2C4]">
               <p className="text-sm text-[#141922]">Opportunities Bidding</p>
-              <p className="text-2xl font-semibold text-[#141922] pt-1">6</p>
+              <p className="text-2xl font-semibold text-[#141922] pt-1">
+                <DashboardSkeleton loading={isLoading}>
+                  {biddingCount || 0}
+                </DashboardSkeleton>
+              </p>
             </Card>
           </Col>
           <Col xxl={4} xl={6} lg={6} md={6} sm={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center border-[#57B2C4]">
               <p className="text-sm text-[#141922]">Opportunities Delivered</p>
-              <p className="text-2xl font-semibold text-[#141922] pt-1">8</p>
+              <p className="text-2xl font-semibold text-[#141922] pt-1">
+                <DashboardSkeleton loading={isLoading}>
+                  {deliveredCount || 0}
+                </DashboardSkeleton>
+              </p>
             </Card>
           </Col>
           <Col xxl={5} xl={12} lg={12} md={12} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Most Active Division</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                Construction
+                <DashboardSkeleton loading={isLoading}>
+                  {mostActiveDivision?.divisionName || ""}
+                </DashboardSkeleton>
               </p>
               <p className="text-sm text-[#667174] pt-1">
-                With $3,668,300 sales pending{" "}
+                With $
+                {currencyFormat(
+                  (+mostActiveDivision?.estimatedDollars || 0).toFixed(2),
+                )}{" "}
+                sales pending
               </p>
             </Card>
           </Col>
@@ -456,7 +252,11 @@ const SalesPipelineContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-sm text-[#141922]">Average Sales Cycle</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                6.3 <span className="text-[#667174]">Days</span>
+                <DashboardSkeleton loading={isLoading}>
+                  {/* Day must be integer */}
+                  {averageSalesCycle?.count.toFixed(0) || 0}
+                </DashboardSkeleton>
+                <span className="text-[#667174]"> Days</span>
               </p>
               <p className="text-sm text-[#667174] pt-1">
                 From delivery to decision
@@ -477,11 +277,17 @@ const SalesPipelineContent: React.FC = () => {
                   />
                 </div>
               </Flex>{" "}
-              <Table<BiddingDataType>
+              <Table<OpportunityItem>
+                loading={biddingTableLoading}
                 dataSource={biddingSource}
                 columns={biddingColumns}
-                pagination={false}
-                scroll={{ x: "max-content" }}
+                scroll={{ x: "max-content", y: 65 * 5 }}
+                pagination={{
+                  current: biddingPage,
+                  total: biddingTotal,
+                  pageSize: 10,
+                  onChange: (page) => setBiddingPage(page),
+                }}
                 summary={(pageData) => {
                   let totalEstHrs = 0;
                   let totalEstProfit = 0;
@@ -489,7 +295,7 @@ const SalesPipelineContent: React.FC = () => {
                   pageData.forEach(({ estHrs, estProfit }) => {
                     totalEstHrs += estHrs;
                     totalEstProfit += parseFloat(
-                      estProfit.replace(/[\$,]/g, "")
+                      estProfit.replace(/[\$,]/g, ""),
                     );
                   });
 
@@ -503,10 +309,10 @@ const SalesPipelineContent: React.FC = () => {
                         Total
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={1} className="font-semibold">
-                        {totalEstHrs}
+                        {currencyFormat(totalEstHrs.toFixed(2))}
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={2} className="font-semibold">
-                        ${totalEstProfit.toLocaleString()}
+                        ${currencyFormat(totalEstProfit.toFixed(2))}
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={3} />
                     </Table.Summary.Row>
@@ -528,11 +334,17 @@ const SalesPipelineContent: React.FC = () => {
                   />
                 </div>
               </Flex>
-              <Table<DeliveredDataType>
+              <Table<OpportunityItem>
+                loading={deliveredTableLoading}
                 dataSource={deliveredSource}
                 columns={deliveredColumns}
-                pagination={false}
-                scroll={{ x: "max-content" }}
+                pagination={{
+                  current: deliveredPage,
+                  total: deliveredTotal,
+                  pageSize: 10,
+                  onChange: (page) => setDeliveredPage(page),
+                }}
+                scroll={{ x: "max-content", y: 65 * 5 }}
                 summary={(pageData) => {
                   let totalEstHrs = 0;
                   let totalEstProfit = 0;
@@ -540,7 +352,7 @@ const SalesPipelineContent: React.FC = () => {
                   pageData.forEach(({ estHrs, estProfit }) => {
                     totalEstHrs += estHrs;
                     totalEstProfit += parseFloat(
-                      estProfit.replace(/[\$,]/g, "")
+                      estProfit.replace(/[\$,]/g, ""),
                     );
                   });
 
@@ -554,10 +366,10 @@ const SalesPipelineContent: React.FC = () => {
                         Total
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={1} className="font-semibold">
-                        {totalEstHrs}
+                        {currencyFormat(totalEstHrs.toFixed(2))}
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={2} className="font-semibold">
-                        ${totalEstProfit.toLocaleString()}
+                        ${currencyFormat(totalEstProfit.toFixed(2))}
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={3} />
                     </Table.Summary.Row>
@@ -595,26 +407,31 @@ const SalesPipelineContent: React.FC = () => {
                     <div className="rounded-lg flex items-center justify-center relative">
                       <Doughnut data={doughnutData} options={doughnutOptions} />
                       <p className="text-[#141922] text-[40px] font-semibold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        55%
+                        {doughnutData.datasets[0].data[0]}%
                         <p className="text-[#667174] text-xl text-center">
                           Won
                         </p>
                       </p>
                     </div>
                     <p className="text-[#667174] mt-6">
-                      of past <strong>19</strong> opportunities
-                    </p>
-                    <p className="text-[#667174]">
-                      from <strong>Sep 21</strong> to <strong>Oct 21</strong>
+                      of past{" "}
+                      <strong>{currencyFormat(opportunitiesTotal)}</strong>{" "}
+                      opportunities
                     </p>
                   </Flex>
                 </Col>
                 <Col xl={14} lg={24} md={24} xs={24}>
-                  <Table<OpportunityDataType>
-                    dataSource={opportunitiesSource}
+                  <Table<WonLostItem>
+                    loading={wonLostLoading}
+                    dataSource={wonLostSource}
                     columns={opportunitiesColumns}
-                    pagination={false}
-                    scroll={{ x: "max-content" }}
+                    pagination={{
+                      total: opportunitiesTotal,
+                      current: opportunitiesPage,
+                      pageSize: 10,
+                      onChange: (page) => setOpportunitiesPage(page),
+                    }}
+                    scroll={{ x: "max-content", y: 65 * 5 }}
                   />
                 </Col>
               </Row>
