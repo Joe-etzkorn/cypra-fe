@@ -21,7 +21,7 @@ export const useSalesDashboard = () => {
   const closeRate = salesDashboardData?.closeRate;
   const salesWonChart = salesDashboardData?.salesWonChart;
   const salesMixChart = salesDashboardData?.salesMixChart;
-  const estimatedGrossMargin = salesDashboardData?.estimatedGrossMargin;
+  const estimatedGrossMargin = salesDashboardData?.estimatedGrossMarin;
   const leaderBoardSource = (salesDashboardData?.leaderboardTable || [])
     .sort(
       (a, b) =>
@@ -87,14 +87,9 @@ export const useSalesDashboard = () => {
     ],
     datasets: [
       {
-        label: "Monthly Revenue",
-        data: salesDashboardData?.salesWonChart.monthlyRevenue || [],
-        backgroundColor: "#36A2EB",
-      },
-      {
-        label: "Monthly Total Won",
-        data: salesDashboardData?.salesWonChart.monthlyTotalWon || [],
-        backgroundColor: "#FF6384",
+        data: [6, 9, 12, 13, 5, 6, 5, 5, 6, 9, 12, 13],
+        backgroundColor: ["#57B2C4"],
+        hoverOffset: 10,
       },
     ],
   };
@@ -112,9 +107,6 @@ export const useSalesDashboard = () => {
           color: "#ccc",
           lineWidth: 1,
         },
-        ticks: {
-          callback: (value: number) => `$${currencyFormat(value)}`,
-        },
       },
       x: {
         grid: {
@@ -125,25 +117,18 @@ export const useSalesDashboard = () => {
     plugins: {
       legend: {
         position: "top" as const,
-        align: "end",
         labels: {
-          usePointStyle: true,
-          pointStyle: "circle",
+          generateLabels: () => {
+            return [];
+          },
         },
       },
       tooltip: {
         callbacks: {
           label: (context: any) => {
-            const datasetLabel = context.dataset.label || "";
-            const value = context.raw;
             debouncedDataIndex(context.dataIndex);
-
-            if (datasetLabel === "Monthly Revenue") {
-              return `${datasetLabel}: $${currencyFormat(value.toFixed(2))}`;
-            }
-            return `${datasetLabel}: ${value}`;
+            return `Value: ${context.raw}`;
           },
-          events: ["mousemove", "mouseout"],
         },
       },
     },

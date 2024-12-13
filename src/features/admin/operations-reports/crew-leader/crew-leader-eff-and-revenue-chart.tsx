@@ -10,58 +10,40 @@ import {
   ChartOptions,
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
+import { Spin } from "antd";
+import { currencyFormat } from "@utils/common";
 
 ChartJS.register(Tooltip, Title, PointElement, LinearScale, annotationPlugin);
 
-interface DataPoint {
-  x: number;
-  y: number;
-  label?: string;
-  efficiency?: string;
-  revenue?: string;
+interface CrewLeaderEfficiencyAndRevenueChartProps {
+  data: ChartData<"scatter", any[]>;
+  loading: boolean;
 }
 
-const CrewLeaderEfficiencyAndRevenueChart: React.FC = () => {
-  const data: ChartData<"scatter", DataPoint[]> = {
-    datasets: [
-      {
-        label: "Red Group",
-        data: [
-          { x: 1.7, y: 97 },
-          { x: 1.75, y: 108 },
-          { x: 1.77, y: 105 },
-          { x: 1.8, y: 97 },
-          { x: 1.9, y: 113 },
-          { x: 2.1, y: 105 },
-          { x: 2.15, y: 115 },
-          { x: 2.25, y: 104 },
-          { x: 2.3, y: 117 },
-          { x: 2.35, y: 111 },
-        ],
-        backgroundColor: "#EF6F6C",
-      },
-      {
-        label: "Blue Group",
-        data: [
-          { x: 2.01, y: 122 },
-          { x: 2.15, y: 120 },
-          { x: 2.27, y: 118 },
-          { x: 2.28, y: 124 },
-        ],
-        backgroundColor: "#57B2C4",
-      },
-      {
-        label: "Blue Group",
-        data: [
-          { x: 2.31, y: 122 },
-          { x: 2.45, y: 120 },
-          { x: 2.57, y: 118 },
-          { x: 2.58, y: 124 },
-        ],
-        backgroundColor: "#59C9A5",
-      },
-    ],
-  };
+const CrewLeaderEfficiencyAndRevenueChart: React.FC<
+  CrewLeaderEfficiencyAndRevenueChartProps
+> = ({ data, loading }) => {
+  if (loading) {
+    return <Spin className="flex justify-center items-center size-full" />;
+  }
+
+  const averageEarnedRevenue = currencyFormat(
+    (
+      data?.datasets?.[0]?.data?.reduce(
+        (acc: number, item: any) => acc + item?.x,
+        0,
+      ) / (data?.datasets?.[0]?.data?.length || 1)
+    )?.toFixed(2) || 0,
+  );
+
+  const averageLaborEfficiency = currencyFormat(
+    (
+      data?.datasets?.[0]?.data?.reduce(
+        (acc: number, item: any) => acc + item?.y,
+        0,
+      ) / (data?.datasets?.[0]?.data?.length || 1)
+    )?.toFixed(2) || 0,
+  );
 
   const options: ChartOptions<"scatter"> = {
     responsive: true,
@@ -97,15 +79,18 @@ const CrewLeaderEfficiencyAndRevenueChart: React.FC = () => {
           }
 
           // Set tooltip data
-          if (tooltipModel.body) {
-            const name = tooltipModel.dataPoints[0].dataset.label;
-            const efficiency = tooltipModel.dataPoints[0].raw.y;
-            const revenue = tooltipModel.dataPoints[0].raw.x;
-
+          if (tooltipModel?.body) {
+            const dataPoint = tooltipModel?.dataPoints?.[0]?.raw;
             tooltipEl.innerHTML = `
-              <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">${name}</div>
-              <div style="color: #667174;">Labor Efficiency: <p style="font-weight: bold; color: #141922;">${efficiency}%</p></div>
-              <div style="color: #667174;">Earned Revenue: <p style="font-weight: bold; color: #141922;">$${revenue}M</p></div>
+              <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">${
+                dataPoint?.label
+              }</div>
+              <div style="color: #667174;">Labor Efficiency: <p style="font-weight: bold; color: #141922;">${currencyFormat(
+                dataPoint?.y?.toFixed(2) || 0,
+              )}%</p></div>
+              <div style="color: #667174;">Earned Revenue: <p style="font-weight: bold; color: #141922;">$${currencyFormat(
+                dataPoint?.x?.toFixed(2) || 0,
+              )}M</p></div>
             `;
           }
 
@@ -122,15 +107,19 @@ const CrewLeaderEfficiencyAndRevenueChart: React.FC = () => {
         annotations: {
           horizontalLine: {
             type: "line",
-            xMin: 1.5,
-            xMax: 3,
-            yMin: 115,
-            yMax: 115,
+            xMin: 0,
+            xMax: Math.max(
+              ...(data?.datasets?.[0]?.data?.map(
+                (item) => item?.earnedRevenue,
+              ) || [0]),
+            ),
+            yMin: +averageLaborEfficiency,
+            yMax: +averageLaborEfficiency,
             borderColor: "#57B2C4",
             borderWidth: 1,
             borderDash: [6, 4],
             label: {
-              content: "115% Average", // Use 'content' for the label
+              content: `${averageLaborEfficiency}% Average`,
               display: true,
               position: "start",
               backgroundColor: "white",
@@ -144,15 +133,18 @@ const CrewLeaderEfficiencyAndRevenueChart: React.FC = () => {
           },
           verticalLine: {
             type: "line",
-            xMin: 2.36,
-            xMax: 2.36,
-            yMin: 95,
-            yMax: 130,
+            xMin: +averageEarnedRevenue,
+            xMax: +averageEarnedRevenue,
+            yMin: 0,
+            yMax:
+              Math.max(
+                ...(data?.datasets?.[0]?.data?.map((item) => item?.y) || [0]),
+              ) * 1.1,
             borderColor: "#57B2C4",
             borderWidth: 1,
             borderDash: [6, 4],
             label: {
-              content: "$2.36M Average", // Use 'content' for the label
+              content: `$${averageEarnedRevenue}M Average`,
               display: true,
               position: "end",
               backgroundColor: "white",
@@ -170,7 +162,7 @@ const CrewLeaderEfficiencyAndRevenueChart: React.FC = () => {
       legend: {
         position: "top" as const,
         labels: {
-          generateLabels: (_chart: any) => {
+          generateLabels: () => {
             return [];
           },
         },

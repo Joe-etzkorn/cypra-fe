@@ -162,7 +162,7 @@ const SalesDashboardContent: React.FC = () => {
                   {estimatedGrossMargin?.count ? (
                     <>
                       {estimatedGrossMargin?.count?.toFixed(1)}
-                      <span className="text-[#667174]">$</span>
+                      <span className="text-[#667174]">%</span>
                     </>
                   ) : (
                     0
@@ -306,6 +306,7 @@ const SalesDashboardContent: React.FC = () => {
                       <div>
                         <h4>Sales Won</h4>
                         <p className="font-bold">
+                          $
                           <DashboardSkeleton loading={loading}>
                             {salesWonChart?.monthlyTotalWon?.[dataIndex] || 0}
                           </DashboardSkeleton>

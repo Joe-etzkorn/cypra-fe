@@ -77,9 +77,84 @@ async function getCompletedOpportunities() {
   return response;
 }
 
-async function getCompletedOpportunitiesTable() {
+async function getCompletedOpportunitiesTable(params: {
+  limit: number;
+  page: number;
+}) {
+  const { limit, page } = params;
+
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+  });
+
   const response = await httpMethod.GET({
-    url: REQUEST_URL.COMPLETED_OPPORTUNITIES_TABLE,
+    url: `${
+      REQUEST_URL.COMPLETED_OPPORTUNITIES_TABLE
+    }?${queryParams.toString()}`,
+  });
+  return response;
+}
+
+async function getOperationsDashboard() {
+  const response = await httpMethod.GET({
+    url: REQUEST_URL.OPERATIONS_DASHBOARD,
+  });
+  return response;
+}
+
+async function getCrewReportTable(params: { page: number; limit: number }) {
+  const { limit, page } = params;
+
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+  });
+
+  const response = await httpMethod.GET({
+    url: `${REQUEST_URL.CREW_REPORT_TABLE}?${queryParams.toString()}`,
+  });
+  return response;
+}
+
+async function getTopServicesTable(params: { page: number; limit: number }) {
+  const { limit, page } = params;
+
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+  });
+
+  const response = await httpMethod.GET({
+    url: `${REQUEST_URL.TOP_SERVICES_TABLE}?${queryParams.toString()}`,
+  });
+  return response;
+}
+
+async function getCrewLeaderReport() {
+  const response = await httpMethod.GET({
+    url: REQUEST_URL.CREW_LEADER_REPORT,
+  });
+  return response;
+}
+
+async function getCrewLeaderReportTable() {
+  const response = await httpMethod.GET({
+    url: REQUEST_URL.CREW_LEADER_REPORT_TABLE,
+  });
+  return response;
+}
+
+async function getCrewLeaderChartEfficiencyWarrantyHours() {
+  const response = await httpMethod.GET({
+    url: REQUEST_URL.CREW_LEADER_CHART_EFFICIENCY_WARRANTY_HOURS,
+  });
+  return response;
+}
+
+async function getCrewLeaderChartEfficiencyEarnedRevenue() {
+  const response = await httpMethod.GET({
+    url: REQUEST_URL.CREW_LEADER_CHART_EFFICIENCY_EARNED_REVENUE,
   });
   return response;
 }
@@ -94,4 +169,11 @@ export const DashboardService = {
   getServicesReport,
   getCompletedOpportunities,
   getCompletedOpportunitiesTable,
+  getOperationsDashboard,
+  getCrewReportTable,
+  getTopServicesTable,
+  getCrewLeaderReport,
+  getCrewLeaderReportTable,
+  getCrewLeaderChartEfficiencyWarrantyHours,
+  getCrewLeaderChartEfficiencyEarnedRevenue,
 };

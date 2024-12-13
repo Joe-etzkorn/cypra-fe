@@ -1,34 +1,42 @@
-import React from "react";
-import { Layout, Card, Row, Col, Flex, Table, Select } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DashboardSkeleton from "@components/dashboard-skeleton";
 import {
-  faArrowTrendUp,
-  faRotateRight,
-  faDownload,
   faArrowTrendDown,
+  faArrowTrendUp,
+  faDownload,
+  faRotateRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker, Space } from "antd";
-import { Bar } from "react-chartjs-2";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { currencyFormat } from "@utils/common";
 import {
-  Chart as ChartJS,
+  Card,
+  Col,
+  DatePicker,
+  Flex,
+  Layout,
+  Row,
+  Select,
+  Space,
+  Table,
+} from "antd";
+import {
+  ArcElement,
   BarElement,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
   Tooltip,
-  Legend,
-  ArcElement,
 } from "chart.js";
-import { SalesWonData, SalesWonOptions } from "./bar-chart-data";
+import React from "react";
+import { Bar } from "react-chartjs-2";
 import {
-  CrewReportDataType,
-  CrewReportsColumns,
-  CrewReportsSources,
-} from "./crew-reports-table";
-import {
-  TopServicesColumns,
-  TopServicesDataType,
-  TopServicesSources,
-} from "./top-services-table";
+  CrewReportTableData,
+  TopServicesTableData,
+} from "../../../types/operations-dashboard";
+import { CrewReportsColumns } from "./crew-reports-table";
+import { TopServicesColumns } from "./top-services-table";
+import { useOperationsDashboard } from "./use-operations-dashboard";
+import { useOperationDashboardPagination } from "@stores/operation-dashboard-pagination";
 
 ChartJS.register(
   BarElement,
@@ -36,12 +44,28 @@ ChartJS.register(
   LinearScale,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
 );
 const { Content } = Layout;
 const { RangePicker } = DatePicker;
 
 const OperationsDashboardContent: React.FC = () => {
+  const {
+    operationsDashboardData,
+    crewReportTableSources,
+    topServicesTableSources,
+    crewReportTableLoading,
+    topServicesTableLoading,
+    salesWonData,
+    salesWonOptions,
+    isLoading,
+    dataIndex,
+    crewReportTableData,
+    topServicesTableData,
+  } = useOperationsDashboard();
+  const { setCrewReportPage, setTopServicesPage } =
+    useOperationDashboardPagination();
+
   return (
     <Layout className="rounded-[32px] mx-6 mb-6 bg-[#F4F6F6] overflow-y-auto">
       <Content className="p-8 rounded-[32px]">
@@ -112,7 +136,12 @@ const OperationsDashboardContent: React.FC = () => {
                     Earned Revenue
                   </p>
                   <p className="text-4xl font-semibold text-[#141922]">
-                    <span className="text-[#667174]">$</span>10,750,322
+                    <span className="text-[#667174]">$</span>
+                    <DashboardSkeleton loading={isLoading}>
+                      {currencyFormat(
+                        operationsDashboardData?.common?.total?.toFixed(2) || 0,
+                      )}
+                    </DashboardSkeleton>
                   </p>
                   <p className="text-sm text-[#667174]">
                     vs previous $8,202,093
@@ -129,7 +158,13 @@ const OperationsDashboardContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg ant-card-report-padding">
               <p className="text-sm text-[#141922]">vs previous $8,202,093</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                $3,150,000
+                $
+                <DashboardSkeleton loading={isLoading}>
+                  {currencyFormat(
+                    operationsDashboardData?.grossProfit?.total?.toFixed(2) ||
+                      0,
+                  )}
+                </DashboardSkeleton>
               </p>
               <p className="text-sm text-[#667174] pt-1">
                 up 30% vs previous period
@@ -140,7 +175,10 @@ const OperationsDashboardContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg ant-card-report-padding">
               <p className="text-sm text-[#141922]">Gross Margin</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                52.3%
+                <DashboardSkeleton loading={isLoading}>
+                  {operationsDashboardData?.grossMargin?.count?.toFixed(2) || 0}
+                </DashboardSkeleton>
+                %
               </p>
               <p className="text-sm text-[#667174] pt-1">vs previous period</p>
             </Card>
@@ -149,7 +187,11 @@ const OperationsDashboardContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center ant-card-report-padding border-[#57B2C4]">
               <p className="text-sm text-[#141922]">Hours Variance</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                48.9%
+                <DashboardSkeleton loading={isLoading}>
+                  {operationsDashboardData?.hoursVariance?.count?.toFixed(2) ||
+                    0}
+                </DashboardSkeleton>
+                %
               </p>
               <Flex
                 justify="center"
@@ -169,7 +211,12 @@ const OperationsDashboardContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center ant-card-report-padding border-[#57B2C4]">
               <p className="text-sm text-[#141922]">Labor Rate Variance</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                $2.82
+                $
+                <DashboardSkeleton loading={isLoading}>
+                  {operationsDashboardData?.laborRateVariance?.total?.toFixed(
+                    2,
+                  ) || 0}
+                </DashboardSkeleton>
               </p>
               <Flex
                 justify="center"
@@ -303,22 +350,47 @@ const OperationsDashboardContent: React.FC = () => {
                     <Flex className="flex-col text-white gap-1 pl-5">
                       <div>
                         <h4>Revenue</h4>
-                        <p className="font-bold">$29,110.04</p>
+                        <p className="font-bold">
+                          $
+                          <DashboardSkeleton loading={isLoading}>
+                            {currencyFormat(
+                              operationsDashboardData?.earnedRevenueChart?.monthlyRevenue?.[
+                                dataIndex
+                              ]?.toFixed(2) || 0,
+                            )}
+                          </DashboardSkeleton>
+                        </p>
                       </div>
                       <div>
                         <h4>Gross Profit</h4>
-                        <p className="font-bold">$12,312.23</p>
+                        <p className="font-bold">
+                          $
+                          <DashboardSkeleton loading={isLoading}>
+                            {currencyFormat(
+                              operationsDashboardData?.earnedRevenueChart?.monthlyGrossMargin?.[
+                                dataIndex
+                              ]?.toFixed(2) || 0,
+                            )}
+                          </DashboardSkeleton>
+                        </p>
                       </div>
                       <div>
                         <h4>Gross Margin</h4>
-                        <p className="font-bold">49.2%</p>
+                        <p className="font-bold">
+                          <DashboardSkeleton loading={isLoading}>
+                            {operationsDashboardData?.earnedRevenueChart?.monthlyGrossMargin?.[
+                              dataIndex
+                            ]?.toFixed(2) || 0}
+                          </DashboardSkeleton>
+                          %
+                        </p>
                       </div>
                     </Flex>
                   </Card>
                 </Col>
                 <Col xl={18} lg={15} md={24}>
                   <div className="h-full rounded-lg flex items-center">
-                    <Bar data={SalesWonData} options={SalesWonOptions} />
+                    <Bar data={salesWonData} options={salesWonOptions} />
                   </div>
                 </Col>
               </Row>
@@ -331,15 +403,38 @@ const OperationsDashboardContent: React.FC = () => {
                 <h3 className="text-xl">Operations Backlog</h3>
                 <div>
                   <h4>Revenue Backlog</h4>
-                  <p className="font-bold text-xl">$800,000</p>
+                  <p className="font-bold text-xl">
+                    $
+                    <DashboardSkeleton loading={isLoading}>
+                      {currencyFormat(
+                        operationsDashboardData?.operationsBacklog?.totalRevenueBacklog?.toFixed(
+                          2,
+                        ) || 0,
+                      )}
+                    </DashboardSkeleton>
+                  </p>
                 </div>
                 <div>
                   <h4>Hours Backlog</h4>
-                  <p className="font-bold text-xl">4,432 Hours</p>
+                  <p className="font-bold text-xl">
+                    <DashboardSkeleton loading={isLoading}>
+                      {operationsDashboardData?.operationsBacklog?.totalHoursBacklog?.toFixed(
+                        2,
+                      ) || 0}
+                    </DashboardSkeleton>{" "}
+                    Hours
+                  </p>
                 </div>
                 <div>
                   <h4>Runway</h4>
-                  <p className="font-bold text-xl">48 Days</p>
+                  <p className="font-bold text-xl">
+                    <DashboardSkeleton loading={isLoading}>
+                      {operationsDashboardData?.operationsBacklog?.totalRunway?.toFixed(
+                        2,
+                      ) || 0}
+                    </DashboardSkeleton>{" "}
+                    Days
+                  </p>
                 </div>
               </Flex>
             </Card>
@@ -348,11 +443,19 @@ const OperationsDashboardContent: React.FC = () => {
           <Col xl={12} lg={12} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-xl text-[#667174] mb-4">Crew Reports</p>
-              <Table<CrewReportDataType>
-                dataSource={CrewReportsSources}
+              <Table<CrewReportTableData>
+                dataSource={crewReportTableSources}
                 columns={CrewReportsColumns}
-                pagination={false}
-                scroll={{ x: "max-content" }}
+                loading={crewReportTableLoading}
+                pagination={{
+                  current: crewReportTableData?.currentPage,
+                  total: crewReportTableData?.total,
+                  onChange: (page) => {
+                    setCrewReportPage(page);
+                  },
+                  hideOnSinglePage: true,
+                }}
+                scroll={{ x: "max-content", y: 300 }}
               />
             </Card>
           </Col>
@@ -360,11 +463,19 @@ const OperationsDashboardContent: React.FC = () => {
           <Col xl={12} lg={12} md={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg">
               <p className="text-xl text-[#667174] mb-4">Top Services</p>
-              <Table<TopServicesDataType>
-                dataSource={TopServicesSources}
+              <Table<TopServicesTableData>
+                dataSource={topServicesTableSources}
                 columns={TopServicesColumns}
-                pagination={false}
-                scroll={{ x: "max-content" }}
+                loading={topServicesTableLoading}
+                pagination={{
+                  current: topServicesTableData?.currentPage,
+                  total: topServicesTableData?.total,
+                  onChange: (page) => {
+                    setTopServicesPage(page);
+                  },
+                  hideOnSinglePage: true,
+                }}
+                scroll={{ x: "max-content", y: 300 }}
               />
             </Card>
           </Col>

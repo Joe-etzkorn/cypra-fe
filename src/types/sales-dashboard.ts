@@ -9,7 +9,7 @@ export interface SalesDashboardData {
   closeRate: {
     count: number;
   };
-  estimatedGrossMargin: {
+  estimatedGrossMarin: {
     count: any;
   };
   salesWonChart: {

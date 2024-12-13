@@ -1,66 +1,30 @@
+import { currencyFormat } from "@utils/common";
+import { Spin } from "antd";
+import {
+  ChartData,
+  Chart as ChartJS,
+  ChartOptions,
+  LinearScale,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
 import React from "react";
 import { Scatter } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  Tooltip,
-  Title,
-  PointElement,
-  LinearScale,
-  ChartData,
-  ChartOptions,
-} from "chart.js";
 
 ChartJS.register(Tooltip, Title, PointElement, LinearScale);
 
-interface DataPoint {
-  x: number;
-  y: number;
-  label?: string;
-  efficiency?: string;
-  revenue?: string;
+interface CrewLeaderEffAndWarrantyHoursChartProps {
+  data: ChartData<"scatter">;
+  loading: boolean;
 }
 
-const CrewLeaderEffAndWarrantyHoursChart: React.FC = () => {
-  const data: ChartData<"scatter", DataPoint[]> = {
-    datasets: [
-      {
-        label: "Red Group",
-        data: [
-          { x: 1.7, y: 97 },
-          { x: 1.75, y: 108 },
-          { x: 1.77, y: 105 },
-          { x: 1.8, y: 97 },
-          { x: 1.9, y: 113 },
-          { x: 2.1, y: 105 },
-          { x: 2.15, y: 115 },
-          { x: 2.25, y: 104 },
-          { x: 2.3, y: 117 },
-          { x: 2.35, y: 111 },
-        ],
-        backgroundColor: "#EF6F6C",
-      },
-      {
-        label: "Blue Group",
-        data: [
-          { x: 2.01, y: 122 },
-          { x: 2.15, y: 120 },
-          { x: 2.27, y: 118 },
-          { x: 2.28, y: 124 },
-        ],
-        backgroundColor: "#57B2C4",
-      },
-      {
-        label: "Blue Group",
-        data: [
-          { x: 2.31, y: 122 },
-          { x: 2.45, y: 120 },
-          { x: 2.57, y: 118 },
-          { x: 2.58, y: 124 },
-        ],
-        backgroundColor: "#59C9A5",
-      },
-    ],
-  };
+const CrewLeaderEffAndWarrantyHoursChart: React.FC<
+  CrewLeaderEffAndWarrantyHoursChartProps
+> = ({ data, loading }) => {
+  if (loading) {
+    return <Spin className="flex justify-center items-center size-full" />;
+  }
 
   const options: ChartOptions<"scatter"> = {
     responsive: true,
@@ -96,15 +60,18 @@ const CrewLeaderEffAndWarrantyHoursChart: React.FC = () => {
           }
 
           // Set tooltip data
-          if (tooltipModel.body) {
-            const name = tooltipModel.dataPoints[0].dataset.label;
-            const efficiency = tooltipModel.dataPoints[0].raw.y;
-            const revenue = tooltipModel.dataPoints[0].raw.x;
-
+          if (tooltipModel?.body) {
+            const dataPoint = tooltipModel?.dataPoints?.[0]?.raw;
             tooltipEl.innerHTML = `
-              <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">${name}</div>
-              <div style="color: #667174;">Labor Efficiency: <p style="font-weight: bold; color: #141922;">${efficiency}%</p></div>
-              <div style="color: #667174;">Warranty Hours: <p style="font-weight: bold; color: #141922;">${revenue}</p></div>
+              <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">${
+                dataPoint?.label
+              }</div>
+              <div style="color: #667174;">Labor Efficiency: <p style="font-weight: bold; color: #141922;">${currencyFormat(
+                dataPoint?.y?.toFixed(2) || 0,
+              )}%</p></div>
+              <div style="color: #667174;">Warranty Hours: <p style="font-weight: bold; color: #141922;">${currencyFormat(
+                dataPoint?.x?.toFixed(2) || 0,
+              )}</p></div>
             `;
           }
 
@@ -121,7 +88,7 @@ const CrewLeaderEffAndWarrantyHoursChart: React.FC = () => {
       legend: {
         position: "top" as const,
         labels: {
-          generateLabels: (_chart: any) => {
+          generateLabels: () => {
             return [];
           },
         },

@@ -29,4 +29,7 @@ export type OpportunitiesReportTable = {
 
 export type OpportunitiesReportTableData = {
   table: OpportunitiesReportTable[];
+  currentPage: number;
+  totalPages: number;
+  total: number;
 };

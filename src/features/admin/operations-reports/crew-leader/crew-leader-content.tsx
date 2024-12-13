@@ -18,13 +18,13 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
-import {
-  CrewLeaderColumns,
-  CrewLeaderDataType,
-  CrewLeaderSources,
-} from "./crew-leader-table";
+import { CrewLeaderColumns } from "./crew-leader-table";
 import CrewLeaderEfficiencyAndRevenueChart from "./crew-leader-eff-and-revenue-chart";
 import CrewLeaderEffAndWarrantyHoursChart from "./crew-leader-eff-and-warranty-hours-chart";
+import { useCrewLeader } from "./use-crew-leader";
+import DashboardSkeleton from "@components/dashboard-skeleton";
+import { currencyFormat } from "@utils/common";
+import { CrewLeaderTableData } from "../../../../types/crew-leader";
 
 ChartJS.register(
   BarElement,
@@ -32,12 +32,23 @@ ChartJS.register(
   LinearScale,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
 );
 const { Content } = Layout;
 const { RangePicker } = DatePicker;
 
 const CrewLeaderContent: React.FC = () => {
+  const {
+    crewLeaderReportData,
+    crewLeaderReportLoading,
+    crewLeaderReportTableDataSources,
+    crewLeaderReportTableLoading,
+    chartEfficiencyWarrantyHoursData,
+    chartEfficiencyWarrantyHoursLoading,
+    chartEfficiencyEarnedRevenueData,
+    chartEfficiencyEarnedRevenueLoading,
+  } = useCrewLeader();
+
   return (
     <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto max-w-[calc(100vw-8rem)] lg:max-w-[calc(100vw-24rem)]">
       <Content className="p-8 rounded-[32px]">
@@ -161,7 +172,14 @@ const CrewLeaderContent: React.FC = () => {
             <Card className="bg-[#F4F6F6] border-none ant-card-custom-padding">
               <Flex className="flex flex-col gap-2">
                 <Flex justify="flex-start" align="center" gap={10}>
-                  <p className="text-2xl text-[#141922]">115%</p>
+                  <p className="text-2xl text-[#141922]">
+                    <DashboardSkeleton loading={crewLeaderReportLoading}>
+                      {currencyFormat(
+                        crewLeaderReportData?.common?.count?.toFixed(2) || 0,
+                      )}
+                    </DashboardSkeleton>
+                    %
+                  </p>
                   <div className="font-semibold rounded-xl bg-[#EF6F6C] text-white px-2 py-0.5">
                     <FontAwesomeIcon icon={faArrowTrendDown} className="mr-2" />
                     30%
@@ -178,7 +196,12 @@ const CrewLeaderContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Earned Revenue / Crew</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                $450,000
+                $
+                <DashboardSkeleton loading={crewLeaderReportLoading}>
+                  {currencyFormat(
+                    crewLeaderReportData?.earnedRevenue?.total?.toFixed(2) || 0,
+                  )}
+                </DashboardSkeleton>
               </p>
               <p className="text-sm text-[#667174] pt-1">
                 vs previous $475,000
@@ -189,7 +212,10 @@ const CrewLeaderContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Gross Margin</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                52.3%
+                <DashboardSkeleton loading={crewLeaderReportLoading}>
+                  {crewLeaderReportData?.grossMargin?.count?.toFixed(2) || 0}
+                </DashboardSkeleton>
+                %
               </p>
               <p className="text-sm text-[#667174] pt-1">
                 compared to 49.2% expected
@@ -200,7 +226,10 @@ const CrewLeaderContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Hours Variance</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                48.9%
+                <DashboardSkeleton loading={crewLeaderReportLoading}>
+                  {crewLeaderReportData?.hoursVariance?.count?.toFixed(2) || 0}
+                </DashboardSkeleton>
+                %
               </p>
               <p className="text-sm text-[#667174] pt-1">vs previous period</p>
             </Card>
@@ -303,29 +332,33 @@ const CrewLeaderContent: React.FC = () => {
                   </Flex>
                 </Flex>
               </Flex>
-              <Table<CrewLeaderDataType>
+              <Table<CrewLeaderTableData>
                 className="scrollbar"
-                dataSource={CrewLeaderSources}
+                dataSource={crewLeaderReportTableDataSources}
+                loading={crewLeaderReportTableLoading}
                 columns={CrewLeaderColumns}
                 pagination={false}
                 scroll={{ x: "max-content", y: 65 * 5 }}
                 expandable={{
-                  expandIcon: ({ expanded, onExpand, record }) =>
-                    expanded ? (
-                      <FontAwesomeIcon
-                        icon={faCaretRight}
-                        fill="#66717480"
-                        className="cursor-pointer pr-2 text-[#667174]"
-                        onClick={(e: any) => onExpand(record, e)}
-                      />
-                    ) : (
-                      <FontAwesomeIcon
-                        icon={faCaretDown}
-                        fill="#66717480"
-                        className="cursor-pointer pr-2 text-[#667174]"
-                        onClick={(e: any) => onExpand(record, e)}
-                      />
-                    ),
+                  expandIcon: ({ expanded, onExpand, record }) => {
+                    if (record?.children && record?.children?.length > 0)
+                      return expanded ? (
+                        <FontAwesomeIcon
+                          icon={faCaretRight}
+                          fill="#66717480"
+                          className="cursor-pointer pr-2 text-[#667174]"
+                          onClick={(e: any) => onExpand(record, e)}
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          fill="#66717480"
+                          className="cursor-pointer pr-2 text-[#667174]"
+                          onClick={(e: any) => onExpand(record, e)}
+                        />
+                      );
+                    return null;
+                  },
                 }}
               />
             </Card>
@@ -347,7 +380,10 @@ const CrewLeaderContent: React.FC = () => {
               </Flex>
 
               <div className="min-h-[400px]">
-                <CrewLeaderEffAndWarrantyHoursChart />
+                <CrewLeaderEffAndWarrantyHoursChart
+                  data={chartEfficiencyWarrantyHoursData}
+                  loading={chartEfficiencyWarrantyHoursLoading}
+                />
               </div>
             </Card>
           </Col>
@@ -367,7 +403,10 @@ const CrewLeaderContent: React.FC = () => {
                 </div>
               </Flex>
               <div className="min-h-[400px]">
-                <CrewLeaderEfficiencyAndRevenueChart />
+                <CrewLeaderEfficiencyAndRevenueChart
+                  data={chartEfficiencyEarnedRevenueData}
+                  loading={chartEfficiencyEarnedRevenueLoading}
+                />
               </div>
             </Card>
           </Col>

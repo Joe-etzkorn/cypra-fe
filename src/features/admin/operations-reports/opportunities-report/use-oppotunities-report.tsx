@@ -3,10 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { DashboardService } from "@services/dashboard.service";
 import {
   OpportunitiesReport,
-  OpportunitiesReportTable,
+  OpportunitiesReportTableData,
 } from "../../../../types/oppotunities-report";
 import { currencyFormat } from "@utils/common";
 import { REQUEST_URL } from "@constants/req-route";
+import { useOpportunitiesReportPagination } from "@stores/opportunities-report-pagination";
 
 export const useOpportunitiesReport = () => {
   const { data: opportunitiesReport, isLoading: opportunitiesReportLoading } =
@@ -15,19 +16,27 @@ export const useOpportunitiesReport = () => {
       queryFn: DashboardService.getCompletedOpportunities,
     });
 
+  const { opportunitiesPage } = useOpportunitiesReportPagination();
+
   const {
     data: opportunitiesReportTable,
     isLoading: opportunitiesReportTableLoading,
   } = useQuery({
-    queryKey: [REQUEST_URL.COMPLETED_OPPORTUNITIES_TABLE],
-    queryFn: DashboardService.getCompletedOpportunitiesTable,
+    queryKey: [REQUEST_URL.COMPLETED_OPPORTUNITIES_TABLE, opportunitiesPage],
+    queryFn: () =>
+      DashboardService.getCompletedOpportunitiesTable({
+        limit: 10,
+        page: opportunitiesPage,
+      }),
   });
-  const opportunitiesReportTableData = opportunitiesReportTable?.data
-    ?.table as OpportunitiesReportTable[];
+
+  const opportunitiesReportTableData =
+    opportunitiesReportTable?.data as OpportunitiesReportTableData;
+
   const opportunitiesReportData =
     (opportunitiesReport?.data as OpportunitiesReport) || {};
 
-  const dataSources: any = opportunitiesReportTableData?.map((item) => ({
+  const dataSources: any = opportunitiesReportTableData?.table?.map((item) => ({
     key: item?.key,
     propertyName: item?.propertyName,
     actualRevenue: currencyFormat(item?.actualRevenue?.toFixed(2) || 0),
@@ -52,6 +61,7 @@ export const useOpportunitiesReport = () => {
     opportunitiesReportData,
     opportunitiesReportLoading,
     dataSources,
+    opportunitiesReportTableData,
     opportunitiesReportTableLoading,
   };
 };

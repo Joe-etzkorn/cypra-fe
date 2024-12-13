@@ -55,8 +55,13 @@ const UserInvited = () => {
             You've been invited!
           </h1>
           <p className="common-font-color px-14 mt-3 mb-10 text-xl">
-            <strong>Henry Waill</strong> has invited you to join{" "}
-            <strong>HBW Landscaping</strong>. Create your account below.
+            <strong>
+              {userInvitedInfo?.invitedUser?.firstName}{" "}
+              {userInvitedInfo?.invitedUser?.lastName}
+            </strong>{" "}
+            has invited you to join{" "}
+            <strong>{userInvitedInfo?.invitedUser?.companyName}</strong>. Create
+            your account below.
           </p>
 
           <Form

@@ -25,12 +25,13 @@ const UserInvitedGuard: FC<RouteGuardProps> = ({ component: Component }) => {
   useEffect(() => {
     verifyInvitationToken(invitationToken ?? "", {
       onSuccess: (res) => {
-        const { email, firstName, lastName } = res.data;
+        const { email, firstName, lastName, invitedUser } = res.data;
         setUserInvitedInfo({
           email,
           firstName,
           lastName,
           password: "",
+          invitedUser,
         });
       },
     });

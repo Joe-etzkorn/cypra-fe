@@ -26,6 +26,7 @@ import {
 import { useOpportunitiesReport } from "./use-oppotunities-report";
 import DashboardSkeleton from "@components/dashboard-skeleton";
 import { currencyFormat } from "@utils/common";
+import { useOpportunitiesReportPagination } from "@stores/opportunities-report-pagination";
 
 ChartJS.register(
   BarElement,
@@ -43,8 +44,11 @@ const OpportunitiesReportContent: React.FC = () => {
     opportunitiesReportData,
     opportunitiesReportLoading,
     dataSources,
+    opportunitiesReportTableData,
     opportunitiesReportTableLoading,
   } = useOpportunitiesReport();
+
+  const { setOpportunitiesPage } = useOpportunitiesReportPagination();
 
   return (
     <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto max-w-[calc(100vw-8rem)] lg:max-w-[calc(100vw-24rem)]">
@@ -217,7 +221,15 @@ const OpportunitiesReportContent: React.FC = () => {
               <Table<OpportunitiesReportDataType>
                 dataSource={dataSources}
                 columns={OpportunitiesReportColumns}
-                pagination={false}
+                pagination={{
+                  current: opportunitiesReportTableData?.currentPage,
+                  total: opportunitiesReportTableData?.total,
+                  pageSize: 10,
+                  onChange: (page) => {
+                    setOpportunitiesPage(page);
+                  },
+                  hideOnSinglePage: true,
+                }}
                 loading={opportunitiesReportTableLoading}
                 scroll={{ x: "max-content" }}
                 expandable={{

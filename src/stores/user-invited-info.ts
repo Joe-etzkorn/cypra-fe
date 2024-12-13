@@ -6,6 +6,7 @@ interface UserInvitedInfo {
   firstName: string;
   lastName: string;
   password: string;
+  invitedUser: any;
 }
 
 interface UserInvitedInfoStore {
