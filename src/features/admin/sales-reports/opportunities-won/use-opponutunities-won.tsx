@@ -6,15 +6,21 @@ import {
 } from "../../../../types/oppotunity-won";
 import { currencyFormat } from "@utils/common";
 import { REQUEST_URL } from "@constants/req-route";
+import { useSalesReportPagination } from "@stores/sales-report-pagination";
 
 export const useOpportunitiesWon = () => {
   const { data, isLoading } = useQuery({
     queryKey: [REQUEST_URL.OPPORTUNITIES_WON],
     queryFn: DashboardService.getOpportunitiesWon,
   });
+  const { opportunitiesWonPage } = useSalesReportPagination();
   const { data: tableData, isLoading: tableLoading } = useQuery({
-    queryKey: [REQUEST_URL.OPPORTUNITIES_WON_TABLE],
-    queryFn: DashboardService.getOpportunitiesWonTable,
+    queryKey: [REQUEST_URL.OPPORTUNITIES_WON_TABLE, opportunitiesWonPage],
+    queryFn: () =>
+      DashboardService.getOpportunitiesWonTable({
+        page: opportunitiesWonPage,
+        limit: 10,
+      }),
   });
 
   const opportunitiesWonData = data?.data as OpportunitiesWonData;
@@ -44,6 +50,7 @@ export const useOpportunitiesWon = () => {
 
   return {
     opportunitiesWonData,
+    opportunitiesWonTableData,
     dataSources,
     isLoading,
     tableLoading,

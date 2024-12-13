@@ -441,7 +441,7 @@ const OperationsDashboardContent: React.FC = () => {
           </Col>
 
           <Col xl={12} lg={12} md={24} xs={24}>
-            <Card className="bg-white rounded-2xl shadow-lg">
+            <Card className="bg-white rounded-2xl shadow-lg  h-[500px]">
               <p className="text-xl text-[#667174] mb-4">Crew Reports</p>
               <Table<CrewReportTableData>
                 dataSource={crewReportTableSources}
@@ -455,13 +455,13 @@ const OperationsDashboardContent: React.FC = () => {
                   },
                   hideOnSinglePage: true,
                 }}
-                scroll={{ x: "max-content", y: 300 }}
+                scroll={{ x: "max-content", y: 280 }}
               />
             </Card>
           </Col>
 
           <Col xl={12} lg={12} md={24} xs={24}>
-            <Card className="bg-white rounded-2xl shadow-lg">
+            <Card className="bg-white rounded-2xl shadow-lg  h-[500px]">
               <p className="text-xl text-[#667174] mb-4">Top Services</p>
               <Table<TopServicesTableData>
                 dataSource={topServicesTableSources}
@@ -475,7 +475,7 @@ const OperationsDashboardContent: React.FC = () => {
                   },
                   hideOnSinglePage: true,
                 }}
-                scroll={{ x: "max-content", y: 300 }}
+                scroll={{ x: "max-content", y: 280 }}
               />
             </Card>
           </Col>

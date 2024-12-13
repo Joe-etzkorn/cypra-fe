@@ -56,9 +56,18 @@ async function getOpportunitiesWon() {
   return response;
 }
 
-async function getOpportunitiesWonTable() {
+async function getOpportunitiesWonTable(params: {
+  page: number;
+  limit: number;
+}) {
+  const { limit, page } = params;
+
+  const queryParams = new URLSearchParams({
+    limit: limit.toString(),
+    page: page.toString(),
+  });
   const response = await httpMethod.GET({
-    url: REQUEST_URL.OPPORTUNITIES_WON_TABLE,
+    url: `${REQUEST_URL.OPPORTUNITIES_WON_TABLE}?${queryParams.toString()}`,
   });
   return response;
 }

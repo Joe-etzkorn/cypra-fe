@@ -33,6 +33,7 @@ import React from "react";
 import { OpportunitiesColumns } from "./opportunities-table";
 import { useOpportunitiesWon } from "./use-opponutunities-won";
 import { OpportunitiesWonTable } from "../../../../types/oppotunity-won";
+import { useSalesReportPagination } from "@stores/sales-report-pagination";
 
 ChartJS.register(
   BarElement,
@@ -46,9 +47,14 @@ const { Content } = Layout;
 const { RangePicker } = DatePicker;
 
 const OpportunitiesWonContent: React.FC = () => {
-  const { opportunitiesWonData, dataSources, isLoading, tableLoading } =
-    useOpportunitiesWon();
-
+  const {
+    opportunitiesWonData,
+    opportunitiesWonTableData,
+    dataSources,
+    isLoading,
+    tableLoading,
+  } = useOpportunitiesWon();
+  const { setOpportunitiesWonPage } = useSalesReportPagination();
   return (
     <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto max-w-[calc(100vw-8rem)] lg:max-w-[calc(100vw-24rem)]">
       <Content className="p-8 rounded-[32px]">
@@ -277,7 +283,15 @@ const OpportunitiesWonContent: React.FC = () => {
               <Table<OpportunitiesWonTable>
                 dataSource={dataSources}
                 columns={OpportunitiesColumns}
-                pagination={false}
+                pagination={{
+                  current: opportunitiesWonTableData?.currentPage,
+                  pageSize: 10,
+                  total: opportunitiesWonTableData?.total,
+                  hideOnSinglePage: true,
+                  onChange: (page) => {
+                    setOpportunitiesWonPage(page);
+                  },
+                }}
                 loading={tableLoading}
                 scroll={{ x: "max-content" }}
                 expandable={{
