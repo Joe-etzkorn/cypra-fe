@@ -39,6 +39,7 @@ async function awsSignIn({ username, password }: SignInInput) {
 async function awsSignOut() {
   try {
     await signOut();
+    return true;
   } catch (error) {
     console.error("Error signing out:", error);
     throw error;

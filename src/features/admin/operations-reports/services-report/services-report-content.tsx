@@ -20,8 +20,8 @@ import {
 import {
   ServicesReportColumns,
   ServicesReportDataType,
-  ServicesReportSources,
 } from "./services-report-table";
+import { useServiceReport } from "./use-service-report";
 
 ChartJS.register(
   BarElement,
@@ -29,12 +29,14 @@ ChartJS.register(
   LinearScale,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
 );
 const { Content } = Layout;
 const { RangePicker } = DatePicker;
 
 const ServicesReportContent: React.FC = () => {
+  const { dataSource, isLoading } = useServiceReport();
+
   return (
     <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto max-w-[calc(100vw-8rem)] lg:max-w-[calc(100vw-24rem)]">
       <Content className="p-8 rounded-[32px]">
@@ -162,27 +164,31 @@ const ServicesReportContent: React.FC = () => {
               </Flex>
               <Table<ServicesReportDataType>
                 className="scrollbar"
-                dataSource={ServicesReportSources}
+                dataSource={dataSource}
                 columns={ServicesReportColumns}
+                loading={isLoading}
                 pagination={false}
-                scroll={{ x: "max-content", y: 65 * 5 }}
+                scroll={{ x: "max-content" }}
                 expandable={{
-                  expandIcon: ({ expanded, onExpand, record }) =>
-                    expanded ? (
-                      <FontAwesomeIcon
-                        icon={faCaretRight}
-                        fill="#66717480"
-                        className="cursor-pointer pr-2 text-[#667174]"
-                        onClick={(e: any) => onExpand(record, e)}
-                      />
-                    ) : (
-                      <FontAwesomeIcon
-                        icon={faCaretDown}
-                        fill="#66717480"
-                        className="cursor-pointer pr-2 text-[#667174]"
-                        onClick={(e: any) => onExpand(record, e)}
-                      />
-                    ),
+                  expandIcon: ({ expanded, onExpand, record }) => {
+                    if (record?.children && record?.children?.length > 0)
+                      return expanded ? (
+                        <FontAwesomeIcon
+                          icon={faCaretRight}
+                          fill="#66717480"
+                          className="cursor-pointer pr-2 text-[#667174]"
+                          onClick={(e: any) => onExpand(record, e)}
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          fill="#66717480"
+                          className="cursor-pointer pr-2 text-[#667174]"
+                          onClick={(e: any) => onExpand(record, e)}
+                        />
+                      );
+                    return null;
+                  },
                 }}
               />
             </Card>

@@ -22,8 +22,10 @@ import {
 import {
   OpportunitiesReportColumns,
   OpportunitiesReportDataType,
-  OpportunitiesReportSources,
 } from "./opportunities-report-table";
+import { useOpportunitiesReport } from "./use-oppotunities-report";
+import DashboardSkeleton from "@components/dashboard-skeleton";
+import { currencyFormat } from "@utils/common";
 
 ChartJS.register(
   BarElement,
@@ -31,12 +33,19 @@ ChartJS.register(
   LinearScale,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
 );
 const { Content } = Layout;
 const { RangePicker } = DatePicker;
 
 const OpportunitiesReportContent: React.FC = () => {
+  const {
+    opportunitiesReportData,
+    opportunitiesReportLoading,
+    dataSources,
+    opportunitiesReportTableLoading,
+  } = useOpportunitiesReport();
+
   return (
     <Layout className="rounded-[32px] ml-6 mb-6 bg-[#F4F6F6] overflow-y-auto max-w-[calc(100vw-8rem)] lg:max-w-[calc(100vw-24rem)]">
       <Content className="p-8 rounded-[32px]">
@@ -75,7 +84,13 @@ const OpportunitiesReportContent: React.FC = () => {
             <Card className="bg-[#F4F6F6] border-none ant-card-custom-padding">
               <Flex className="flex flex-col gap-2">
                 <Flex justify="flex-start" align="center" gap={10}>
-                  <p className="text-[40px] font-semibold text-[#141922]">22</p>
+                  <p className="text-[40px] font-semibold text-[#141922]">
+                    <DashboardSkeleton loading={opportunitiesReportLoading}>
+                      {currencyFormat(
+                        opportunitiesReportData?.common?.count?.toFixed(2) || 0,
+                      )}
+                    </DashboardSkeleton>
+                  </p>
                   <div className="font-semibold rounded-xl bg-[#59C9A5] text-white px-2 py-0.5">
                     <FontAwesomeIcon icon={faArrowTrendUp} className="mr-2" />
                     30%
@@ -92,7 +107,13 @@ const OpportunitiesReportContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Estimated Revenue</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                $3,509,022.00
+                $
+                <DashboardSkeleton loading={opportunitiesReportLoading}>
+                  {currencyFormat(
+                    opportunitiesReportData?.actualRevenue?.total?.toFixed(2) ||
+                      0,
+                  )}
+                </DashboardSkeleton>
               </p>
               <Flex
                 justify="flex-start"
@@ -113,7 +134,14 @@ const OpportunitiesReportContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-left ant-card-report-padding">
               <p className="text-sm text-[#141922]">Estimated Gross Profit</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                $1,154,421.00
+                $
+                <DashboardSkeleton loading={opportunitiesReportLoading}>
+                  {currencyFormat(
+                    opportunitiesReportData?.actualGrossProfit?.total?.toFixed(
+                      2,
+                    ) || 0,
+                  )}
+                </DashboardSkeleton>
               </p>
               <Flex
                 justify="flex-start"
@@ -134,7 +162,12 @@ const OpportunitiesReportContent: React.FC = () => {
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center border-[#57B2C4] ant-card-report-padding">
               <p className="text-sm text-[#141922]">Estimated Gross Margin</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
-                48.9%
+                <DashboardSkeleton loading={opportunitiesReportLoading}>
+                  {opportunitiesReportData?.actualGrossMarin?.count?.toFixed(
+                    2,
+                  ) || 0}
+                  %
+                </DashboardSkeleton>
               </p>
               <Flex
                 justify="center"
@@ -153,7 +186,14 @@ const OpportunitiesReportContent: React.FC = () => {
           <Col xxl={4} xl={8} lg={12} md={12} sm={24} xs={24}>
             <Card className="bg-white rounded-2xl shadow-lg sales-pipeline-border text-center border-[#57B2C4] ant-card-report-padding">
               <p className="text-sm text-[#141922]">Labor Efficiency</p>
-              <p className="text-2xl font-semibold text-[#141922] pt-1">102%</p>
+              <p className="text-2xl font-semibold text-[#141922] pt-1">
+                <DashboardSkeleton loading={opportunitiesReportLoading}>
+                  {opportunitiesReportData?.laborEfficiency?.total?.toFixed(
+                    2,
+                  ) || 0}
+                  %
+                </DashboardSkeleton>
+              </p>
               <Flex
                 justify="center"
                 align="center"
@@ -175,27 +215,31 @@ const OpportunitiesReportContent: React.FC = () => {
                 <p className="text-xl text-[#667174]">Table View</p>
               </Flex>{" "}
               <Table<OpportunitiesReportDataType>
-                dataSource={OpportunitiesReportSources}
+                dataSource={dataSources}
                 columns={OpportunitiesReportColumns}
                 pagination={false}
+                loading={opportunitiesReportTableLoading}
                 scroll={{ x: "max-content" }}
                 expandable={{
-                  expandIcon: ({ expanded, onExpand, record }) =>
-                    expanded ? (
-                      <FontAwesomeIcon
-                        icon={faCaretRight}
-                        fill="#66717480"
-                        className="cursor-pointer pr-2 text-[#667174]"
-                        onClick={(e: any) => onExpand(record, e)}
-                      />
-                    ) : (
-                      <FontAwesomeIcon
-                        icon={faCaretDown}
-                        fill="#66717480"
-                        className="cursor-pointer pr-2 text-[#667174]"
-                        onClick={(e: any) => onExpand(record, e)}
-                      />
-                    ),
+                  expandIcon: ({ expanded, onExpand, record }) => {
+                    if (record?.children && record?.children?.length > 0)
+                      return expanded ? (
+                        <FontAwesomeIcon
+                          icon={faCaretRight}
+                          fill="#66717480"
+                          className="cursor-pointer pr-2 text-[#667174]"
+                          onClick={(e: any) => onExpand(record, e)}
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          fill="#66717480"
+                          className="cursor-pointer pr-2 text-[#667174]"
+                          onClick={(e: any) => onExpand(record, e)}
+                        />
+                      );
+                    return null;
+                  },
                 }}
               />
             </Card>

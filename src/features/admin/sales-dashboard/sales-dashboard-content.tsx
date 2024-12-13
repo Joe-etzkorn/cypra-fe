@@ -132,7 +132,7 @@ const SalesDashboardContent: React.FC = () => {
               <p className="text-2xl font-semibold text-[#141922] pt-1">
                 <span className="text-[#667174]">$</span>
                 <DashboardSkeleton loading={loading}>
-                  {currencyFormat(proposals?.total.toFixed(2) || 0)}
+                  {currencyFormat(proposals?.total?.toFixed(2) || 0)}
                 </DashboardSkeleton>
               </p>
               <p className="text-sm text-[#667174] pt-1">
@@ -146,7 +146,7 @@ const SalesDashboardContent: React.FC = () => {
               <p className="text-sm text-[#141922]">Close Rate</p>
               <p className="text-2xl font-semibold text-[#141922] pt-1">
                 <DashboardSkeleton loading={loading}>
-                  {closeRate?.count.toFixed(1) || 0}
+                  {closeRate?.count?.toFixed(2) || 0}
                 </DashboardSkeleton>
                 <span className="text-[#667174]">%</span>
               </p>

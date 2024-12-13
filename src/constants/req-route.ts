@@ -19,6 +19,16 @@ export const REQUEST_URL = {
   //sales dashboard
   SALES_DASHBOARD: "/sales-dashboard",
   REPORT_PIPELINE_DATA: "/sales-dashboard/report/pipeline",
-  BIDDING_DELIVERY_TABLE: "/sales-dashboard/report/pipeline/bidding-delivery-table",
+  BIDDING_DELIVERY_TABLE:
+    "/sales-dashboard/report/pipeline/bidding-delivery-table",
   WON_LOST: "/sales-dashboard/report/pipeline/won-lost",
+  OPPORTUNITIES_WON: "/sales-dashboard/report/opportunities-won",
+  OPPORTUNITIES_WON_TABLE:
+    "/sales-dashboard/report/opportunities-won/table-view",
+  SERVICES_REPORT: "/operations-dashboard/report/services",
+  SERVICES_REPORT_TABLE: "/operations-dashboard/report/services/table-view",
+  COMPLETED_OPPORTUNITIES:
+    "/operations-dashboard/report/completed-opportunities",
+  COMPLETED_OPPORTUNITIES_TABLE:
+    "/operations-dashboard/report/completed-opportunities/table-view",
 };
